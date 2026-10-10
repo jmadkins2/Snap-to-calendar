@@ -136,8 +136,8 @@
         "Login successful! Your role is: " +
         membership.admin_role;
 
-    } 
-    {   form.hidden = true;
+    
+    form.hidden = true;
 
       const signOutButton = document.createElement("button");
       signOutButton.type = "button";
@@ -163,7 +163,7 @@
         message.textContent = "You have signed out successfully.";
       });
     
-    catch (error) {
+    } catch (error) {
       message.textContent =
         "Sign in failed. Please check your email and password.";
       console.error("Login error:", error.message);
