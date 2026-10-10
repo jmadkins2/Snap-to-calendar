@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>PickMyActivities — Administrator Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+      background: #f5f7fa;
+      color: #202936;
+      margin: 0;
+      padding: 24px;
+    }
+    main {
+      max-width: 480px;
+      margin: 50px auto;
+      padding: 30px;
+      background: white;
+      border: 1px solid #d5dce5;
+      border-radius: 12px;
+    }
+    h1 { font-size: 28px; }
+    label {
+      display: block;
+      margin: 20px 0 8px;
+      font-weight: bold;
+    }
+    input {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      border: 2px solid #697586;
+      border-radius: 6px;
+    }
+    button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 16px;
+      font-size: 19px;
+      font-weight: bold;
+      color: white;
+      background: #175c91;
+      border: 0;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:focus-visible, input:focus-visible {
+      outline: 3px solid #e6a23c;
+      outline-offset: 3px;
+    }
+    #message {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>PickMyActivities</h1>
+    <h2>Administrator Login</h2>
+    <p>Sign in to manage community activities.</p>
+
+    <form id="loginForm">
+      <label for="email">Email address</label>
+      <input id="email" type="email"
+             autocomplete="username" required>
+
+      <label for="password">Password</label>
+      <input id="password" type="password"
+             autocomplete="current-password" required>
+
+      <button type="submit">Sign In</button>
+    </form>
+
+    <p id="message" role="status" aria-live="polite"></p>
+  </main>
+
+  <script>
+    document.getElementById("loginForm")
+      .addEventListener("submit", function(event) {
+        event.preventDefault();
+        document.getElementById("message").textContent =
+          "The login form is ready. Supabase authentication will be connected next.";
+      });
+  </script>
+</body>
+</html>
