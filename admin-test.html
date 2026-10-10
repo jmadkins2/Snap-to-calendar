@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>PickMyActivities — Administrator Login</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+      background: #f5f7fa;
+      color: #202936;
+      margin: 0;
+      padding: 24px;
+    }
+
+    main {
+      max-width: 480px;
+      margin: 50px auto;
+      padding: 30px;
+      background: white;
+      border: 1px solid #d5dce5;
+      border-radius: 12px;
+    }
+
+    h1 { font-size: 28px; }
+    h2 { font-size: 22px; }
+
+    label {
+      display: block;
+      margin: 20px 0 8px;
+      font-weight: bold;
+    }
+
+    input {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      border: 2px solid #697586;
+      border-radius: 6px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 16px;
+      font-size: 19px;
+      font-weight: bold;
+      color: white;
+      background: #175c91;
+      border: 0;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    button:focus-visible,
+    input:focus-visible {
+      outline: 3px solid #e6a23c;
+      outline-offset: 3px;
+    }
+
+    #message {
+      margin-top: 20px;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>PickMyActivities</h1>
+    <h2>Administrator Login</h2>
+
+    <p>Sign in to manage community activities.</p>
+
+    <form id="loginForm" hidden>
+      <label for="email">Email address</label>
+      <input
+        id="email"
+        type="email"
+        autocomplete="username"
+        required
+      >
+
+      <label for="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        autocomplete="current-password"
+        required
+      >
+
+      <button type="submit">Sign In</button>
+    </form>
+
+    <p id="message" role="status" aria-live="polite">
+      Checking login status...
+    </p>
+
+    <button id="signOutButton" type="button" hidden>
+      Sign Out
+    </button>
+  </main>
+
+  <script type="module">
+    import { createClient } from
+      "https://esm.sh/@supabase/supabase-js@2";
+
+    // Use the same values as Supabase-testing.html
+    const SUPABASE_URL = "https://atzbisporfxvwqqrthje.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__P_r4py9kqhEigCBUQXMkw_v6RzZ2VJ";
+
+    const supabase = createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    const form = document.getElementById("loginForm");
+    const message = document.getElementById("message");
+    const signOutButton =
+      document.getElementById("signOutButton");
+    const signInButton =
+      form.querySelector('button[type="submit"]');
+
+    function showSignedOut(text = "") {
+      form.reset();
+      form.hidden = false;
+      signOutButton.hidden = true;
+      message.textContent = text;
+    }
+
+    function showSignedIn(role) {
+      form.reset();
+      form.hidden = true;
+      signOutButton.hidden = false;
+
+      message.textContent =
+        "Login successful! Your role is: " + role;
+    }
+
+    async function verifyAdministrator(user) {
+      const { data: membership, error } =
+        await supabase
+          .from("admin_users")
+          .select("admin_role")
+          .eq("community_id", 1)
+          .eq("user_id", user.id)
+          .maybeSingle();
+
+      if (error) {
+        throw error;
+      }
+
+      if (!membership) {
+        await supabase.auth.signOut();
+        showSignedOut(
+          "This account is not authorized to manage activities."
+        );
+        return;
+      }
+
+      showSignedIn(membership.admin_role);
+    }
+
+    async function checkExistingSession() {
+      try {
+        const { data, error } =
+          await supabase.auth.getUser();
+
+        if (error || !data.user) {
+          showSignedOut();
+          return;
+        }
+
+        await verifyAdministrator(data.user);
+
+      } catch (error) {
+        console.error("Session check failed:", error);
+        showSignedOut(
+          "Unable to verify your login. Please try again."
+        );
+      }
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      signInButton.disabled = true;
+      message.textContent = "Signing in...";
+
+      try {
+        const email =
+          document.getElementById("email").value.trim();
+
+        const password =
+          document.getElementById("password").value;
+
+        const { data, error } =
+          await supabase.auth.signInWithPassword({
+            email,
+            password
+          });
+
+        if (error) {
+          throw error;
+        }
+
+        await verifyAdministrator(data.user);
+
+      } catch (error) {
+        console.error("Sign in failed:", error);
+        message.textContent =
+          "Sign in failed. Please check your credentials or try again.";
+
+        document.getElementById("password").value = "";
+
+      } finally {
+        signInButton.disabled = false;
+      }
+    });
+
+    signOutButton.addEventListener("click", async () => {
+      signOutButton.disabled = true;
+      message.textContent = "Signing out...";
+
+      try {
+        const { error } = await supabase.auth.signOut();
+
+        if (error) {
+          throw error;
+        }
+
+        showSignedOut("You have signed out successfully.");
+
+      } catch (error) {
+        console.error("Sign out failed:", error);
+        message.textContent =
+          "Sign out failed. Please try again.";
+
+      } finally {
+        signOutButton.disabled = false;
+      }
+    });
+
+    checkExistingSession();
+  </script>
+</body>
+</html>
