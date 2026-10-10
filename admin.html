@@ -96,6 +96,68 @@
   const message = document.getElementById("message");
   const button = form.querySelector("button");
 
+  
+  // Check for an existing administrator session
+  async function checkExistingSession() {
+    const { data, error } = await supabase.auth.getUser();
+
+    if (error || !data.user) {
+      return;
+    }
+
+    const { data: membership, error: roleError } =
+      await supabase
+        .from("admin_users")
+        .select("admin_role")
+        .eq("community_id", 1)
+        .eq("user_id", data.user.id)
+        .single();
+
+    if (roleError || !membership) {
+      await supabase.auth.signOut();
+      return;
+    }
+
+    form.hidden = true;
+
+    message.textContent =
+      "Login successful! Your role is: " +
+      membership.admin_role;
+
+    // Don't create another Sign Out button
+    if (document.getElementById("signOutButton")) {
+      return;
+    }
+
+    const signOutButton = document.createElement("button");
+    signOutButton.type = "button";
+    signOutButton.textContent = "Sign Out";
+    signOutButton.id = "signOutButton";
+
+    message.insertAdjacentElement(
+      "afterend",
+      signOutButton
+    );
+
+    signOutButton.addEventListener("click", async () => {
+      const { error } = await supabase.auth.signOut();
+
+      if (error) {
+        message.textContent =
+          "Sign out failed. Please try again.";
+        return;
+      }
+
+      signOutButton.remove();
+      form.reset();
+      form.hidden = false;
+      message.textContent =
+        "You have signed out successfully.";
+    });
+  }
+
+  checkExistingSession();
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
