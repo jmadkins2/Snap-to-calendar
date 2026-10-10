@@ -136,7 +136,34 @@
         "Login successful! Your role is: " +
         membership.admin_role;
 
-    } catch (error) {
+    } 
+      form.hidden = true;
+
+      const signOutButton = document.createElement("button");
+      signOutButton.type = "button";
+      signOutButton.textContent = "Sign Out";
+      signOutButton.id = "signOutButton";
+
+      message.insertAdjacentElement(
+        "afterend",
+        signOutButton
+      );
+
+      signOutButton.addEventListener("click", async () => {
+        const { error } = await supabase.auth.signOut();
+
+        if (error) {
+          message.textContent = "Sign out failed. Please try again.";
+          return;
+        }
+
+        signOutButton.remove();
+        form.reset();
+        form.hidden = false;
+        message.textContent = "You have signed out successfully.";
+      });
+    
+    catch (error) {
       message.textContent =
         "Sign in failed. Please check your email and password.";
       console.error("Login error:", error.message);
