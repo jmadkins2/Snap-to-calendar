@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>PickMyActivities - Database Test</title>
+</head>
+<body>
+  <h1>PickMyActivities</h1>
+  <h2>Supabase Connection Test</h2>
+
+  <p id="result">Testing connection...</p>
+
+  <script>
+    const PROJECT_URL = "https://atzbisporfxvwqqrthje.supabase.co";
+    const PUBLISHABLE_KEY = "sb_publishable__P_r4py9kqhEigCBUQXMkw_v6RzZ2VJ";
+
+    async function testConnection() {
+      const result = document.getElementById("result");
+
+      try {
+        const response = await fetch(
+          PROJECT_URL +
+          "/rest/v1/rpc/get_published_activities",
+          {
+            method: "POST",
+            headers: {
+              "apikey": PUBLISHABLE_KEY,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              p_community_id: 1,
+              p_calendar_month: "2026-10-01"
+            })
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            "HTTP " + response.status +
+            ": " + await response.text()
+          );
+        }
+
+        const activities = await response.json();
+
+        result.textContent =
+          "Connection successful! " +
+          activities.length +
+          " published activities found.";
+
+      } catch (error) {
+        result.textContent =
+          "Connection failed: " + error.message;
+      }
+    }
+
+    testConnection();
+  </script>
+</body>
+</html>
