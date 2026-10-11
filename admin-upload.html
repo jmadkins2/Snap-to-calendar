@@ -94,7 +94,7 @@
   hidden>
   Test Administrator Connection
 </button>
-      document.getElementById("testExtractionButton").hidden = false;
+      
   </form>
 
   <p id="message" role="status"
@@ -184,6 +184,7 @@ const uploadButton =
     uploadForm.hidden = false;
     message.textContent =
       "Administrator verified. You may select a calendar.";
+    document.getElementById("testExtractionButton").hidden = false;
   }
 
   checkAdministratorAccess();
