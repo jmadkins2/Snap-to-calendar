@@ -143,14 +143,7 @@
   const uploadForm =
     document.getElementById("uploadForm");
 
-const validationError = validateCalendarFile(file);
 
-if (validationError) {
-  document.getElementById("message").textContent =
-    validationError;
-  return;
-}
-      
   const message =
     document.getElementById("message");
 
@@ -192,7 +185,14 @@ if (validationError) {
           document.getElementById("calendarMonth").value;
         const file =
           document.getElementById("calendarFile").files[0];
+        const validationError = validateCalendarFile(file);
 
+if (validationError) {
+  document.getElementById("message").textContent =
+    validationError;
+  return;
+}
+      
         document.getElementById("message").textContent =
           "Selected " + file.name +
           " for " + month +
