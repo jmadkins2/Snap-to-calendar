@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>Upload Calendar | PickMyActivities</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+      line-height: 1.5;
+      max-width: 650px;
+      margin: 30px auto;
+      padding: 0 20px;
+      color: #222;
+    }
+    h1 { color: #234d68; }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-top: 22px;
+    }
+    input, button {
+      font: inherit;
+      margin-top: 8px;
+    }
+    input[type="month"],
+    input[type="file"] {
+      display: block;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 12px 20px;
+      background: #234d68;
+      color: white;
+      border: 0;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background: #777;
+      cursor: not-allowed;
+    }
+    .note {
+      background: #f0f4f6;
+      padding: 14px;
+      border-radius: 6px;
+    }
+    #message { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Upload Monthly Calendar</h1>
+
+  <p class="note">
+    Select the month and choose a calendar
+    photograph or PDF. Calendars must be
+    reviewed before they are published.
+  </p>
+
+  <form id="uploadForm">
+    <label for="calendarMonth">
+      Calendar month
+    </label>
+    <input
+      id="calendarMonth"
+      type="month"
+      required
+    >
+
+    <label for="calendarFile">
+      Calendar file
+    </label>
+    <input
+      id="calendarFile"
+      type="file"
+      accept=".pdf,.jpg,.jpeg,.png,.heic,.heif,application/pdf,image/jpeg,image/png,image/heic,image/heif"
+      required
+    >
+
+    <button type="submit">
+      Continue
+    </button>
+  </form>
+
+  <p id="message" role="status"
+     aria-live="polite"></p>
+
+  <script>
+    document.getElementById("uploadForm")
+      .addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const month =
+          document.getElementById("calendarMonth").value;
+        const file =
+          document.getElementById("calendarFile").files[0];
+
+        document.getElementById("message").textContent =
+          "Selected " + file.name +
+          " for " + month +
+          ". Upload connection is not enabled yet.";
+      });
+  </script>
+</body>
+</html>
