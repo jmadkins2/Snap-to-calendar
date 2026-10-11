@@ -180,32 +180,93 @@ const uploadButton =
   }
 
   checkAdministratorAccess();
-    document.getElementById("uploadForm")
-      .addEventListener("submit", function(event) {
-        event.preventDefault();
+    
+document.getElementById("uploadForm")
+  .addEventListener("submit", async function(event) {
+    event.preventDefault();
 
-        const month =
-          document.getElementById("calendarMonth").value;
-        const file =
-          document.getElementById("calendarFile").files[0];
-        const validationError = validateCalendarFile(file);
+    const month =
+      document.getElementById("calendarMonth").value;
+
+    const file =
+      document.getElementById("calendarFile").files[0];
+
+    const validationError = validateCalendarFile(file);
+
+    if (validationError) {
+      message.textContent = validationError;
+      return;
+    }
+
+    if (uploadButton.disabled) {
+      return;
+    }
+
+    uploadButton.disabled = true;
+    message.textContent = "Uploading calendar...";
+
+    try {
+      const fileExtension = file.name
+        .split(".")
+        .pop()
+        .toLowerCase();
+
+      const uniqueFileName =
+        crypto.randomUUID() + "." + fileExtension;
+
+      const storagePath =
+        "community-1/" + month + "/" + uniqueFileName;
+
+      const { error: uploadError } =
+        await supabase.storage
+          .from("calendar-originals")
+          .upload(storagePath, file, {
+            upsert: false
+          });
+
+      if (uploadError) {
+        throw uploadError;
       }
-if (validationError) {
-  document.getElementById("message").textContent =
-    validationError;
-  return;
+      const { data: userData, error: userError } =
+  await supabase.auth.getUser();
 
-  if (uploadButton.disabled) {
-  return;
-uploadButton.disabled = true;
+if (userError || !userData.user) {
+  throw new Error(
+    "Your login session has expired."
+  );
 }
-      
-        document.getElementById("message").textContent =
-          "Selected " + file.name +
-          " for " + month +
-          ". Upload connection is not enabled yet.";
-  uploadButton.disabled = false;
-      });
+
+const { error: recordError } =
+  await supabase
+    .from("calendar_imports")
+    .insert({
+      community_id: 1,
+      calendar_month: month + "-01",
+      original_filename: file.name,
+      storage_path: storagePath,
+      status: "uploaded",
+      uploaded_by: userData.user.id
+    });
+
+if (recordError) {
+  throw new Error(
+    "File saved, but calendar record failed: " +
+    recordError.message
+  );
+}
+
+      message.textContent =
+        "Calendar file uploaded successfully. " +
+        "It has not been published.";
+
+    } catch (error) {
+      message.textContent =
+        "Upload failed: " + error.message;
+
+    } finally {
+      uploadButton.disabled = false;
+    }
+  });
   </script>
 </body>
 </html>
