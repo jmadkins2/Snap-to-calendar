@@ -88,7 +88,21 @@
   <p id="message" role="status"
      aria-live="polite"></p>
 
-  <script>
+  
+    <script type="module">
+  import { createClient } from
+    "https://esm.sh/@supabase/supabase-js@2";
+
+  const supabaseUrl =
+    "https://atzbisporfxvwqqrthje.supabase.co";
+
+  const supabaseKey =
+    "sb_publishable__P_r4py9kqhEigCBUQXMkw_v6RzZ2VJ";
+
+  const supabase = createClient(
+    supabaseUrl,
+    supabaseKey
+  );
     document.getElementById("uploadForm")
       .addEventListener("submit", function(event) {
         event.preventDefault();
