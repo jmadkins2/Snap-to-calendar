@@ -66,7 +66,7 @@
     <form id="uploadForm" hidden>
     <label for="calendarMonth">
       Calendar month
-    </label>
+    </label>he
     <input
       id="calendarMonth"
       type="month"
@@ -109,9 +109,48 @@
     supabaseKey
   );
     
+  const allowedExtensions = [
+    "pdf", "jpg", "jpeg", "png", "heic", "heif"
+  ];
+
+  const maximumFileSize = 10 * 1024 * 1024;
+
+  function validateCalendarFile(file) {
+    if (!file) {
+      return "Please select a calendar file.";
+    }
+
+    const extension = file.name
+      .split(".")
+      .pop()
+      .toLowerCase();
+
+    if (!allowedExtensions.includes(extension)) {
+      return "Please choose a PDF or supported photograph.";
+    }
+
+    if (file.size > maximumFileSize) {
+      return "The file must be 10 MB or smaller.";
+    }
+
+    if (file.size === 0) {
+      return "The selected file is empty.";
+    }
+
+    return null;
+  }
+      
   const uploadForm =
     document.getElementById("uploadForm");
 
+const validationError = validateCalendarFile(file);
+
+if (validationError) {
+  document.getElementById("message").textContent =
+    validationError;
+  return;
+}
+      
   const message =
     document.getElementById("message");
 
