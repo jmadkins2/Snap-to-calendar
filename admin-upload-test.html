@@ -206,10 +206,14 @@ const uploadButton =
       if (error) {
         throw error;
       }
-
+message.style.whiteSpace = "pre-wrap";
       message.textContent =
-        data.message || "Connection successful.";
-
+(data.message || "Connection successful.") +
+(data.extracted_text
+  ? "\n\nEXTRACTED CALENDAR ACTIVITIES:\n\n" +
+    data.extracted_text
+  : "");
+      
     } catch (error) {
       message.textContent =
         "Connection test failed: " + error.message;
@@ -218,6 +222,7 @@ const uploadButton =
       button.disabled = false;
     }
   });
+      
 document.getElementById("uploadForm")
   .addEventListener("submit", async function(event) {
     event.preventDefault();
@@ -226,7 +231,8 @@ document.getElementById("uploadForm")
       document.getElementById("calendarMonth").value;
 
     const file =
-      document.getElementById("calendarFile").files[0];
+      do
+      cument.getElementById("calendarFile").files[0];
 
     const validationError = validateCalendarFile(file);
 
