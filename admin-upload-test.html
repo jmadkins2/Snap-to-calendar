@@ -207,6 +207,11 @@ const uploadButton =
         throw error;
       }
 message.style.whiteSpace = "pre-wrap";
+console.log("Calendar extraction diagnostics:", {
+  extracted_length: data.extracted_length,
+  response_status: data.response_status,
+  output_items: data.output_items
+});
       message.textContent =
 (data.message || "Connection successful.") +
 (data.extracted_text
