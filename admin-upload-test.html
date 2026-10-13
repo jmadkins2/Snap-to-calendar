@@ -222,6 +222,11 @@ const uploadButton =
   .addEventListener("click", function() {
     document.getElementById("reviewDate")
       .textContent = "October 2, 2026";
+
+    document.getElementById("reviewActivities")
+      .innerHTML = `
+        <li>October 2 activities will appear here.</li>
+      `;
   });
       
     document.getElementById("testExtractionButton")
