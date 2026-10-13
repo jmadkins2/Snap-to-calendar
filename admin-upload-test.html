@@ -234,6 +234,8 @@ const uploadButton =
       `;
   });
 
+      let savedCalendarText = "";
+      
       async function loadSavedCalendar() {
   const { data, error } = await supabase
     .from("calendar_imports")
@@ -248,6 +250,7 @@ const uploadButton =
   }
 
   if (data?.extracted_text) {
+    savedCalendarText = data.extracted_text;
     console.log(
       "Saved October calendar loaded:",
       data.extracted_text.length,
