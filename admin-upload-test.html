@@ -233,6 +233,31 @@ const uploadButton =
 <li>2:30 — Bucs vs Packers Tailgate Party (CDR)</li>
       `;
   });
+
+      async function loadSavedCalendar() {
+  const { data, error } = await supabase
+    .from("calendar_imports")
+    .select("extracted_text")
+    .eq("import_id", 16)
+    .eq("community_id", 1)
+    .single();
+
+  if (error) {
+    console.error("Could not load saved calendar:", error);
+    return;
+  }
+
+  if (data?.extracted_text) {
+    console.log(
+      "Saved October calendar loaded:",
+      data.extracted_text.length,
+      "characters"
+    );
+  }
+}
+
+      loadSavedCalendar();
+
       
     document.getElementById("testExtractionButton")
   .addEventListener("click", async function() {
