@@ -102,6 +102,30 @@
   Checking administrator access...
 </p>
 
+  <button
+  id="testExtractionButton"
+  type="button"
+  hidden>
+  Test Administrator Connection
+</button>
+      
+  </form>
+
+  <p id="message" role="status"
+   aria-live="polite">
+  Checking administrator access...
+</p>
+
+  
+    <script type="module">
+  import { createClient } from
+    "https://esm.sh/@supabase/supabase-js@2";
+
+  const supabaseUrl =
+    "https://atzbisporfxvwqqrthje.supabase.co";
+
+  const supabaseKey =
+    "sb_publishable__P_r4py9kqhEigCBUQXMkw_v6RzZ2VJ";
   
     <script type="module">
   import { createClient } from
@@ -221,7 +245,7 @@ console.log("Calendar extraction diagnostics:", {
       
     } catch (error) {
       message.textContent =
-        "Connection test failed: " + error.message;
+        "Connection test failed: " + error.message;id=
 
     } finally {
       button.disabled = false;
