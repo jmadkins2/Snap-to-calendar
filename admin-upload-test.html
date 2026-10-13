@@ -258,6 +258,31 @@ const uploadButton =
     );
   }
 }
+function getCalendarDay(dayNumber) {
+  if (!savedCalendarText) {
+    return "";
+  }
+
+  const dayPattern =
+    /^October\s+(\d{1,2}),\s+2026\b.*$/gm;
+
+  const matches = [...savedCalendarText.matchAll(dayPattern)];
+
+  const currentIndex = matches.findIndex(
+    match => Number(match[1]) === dayNumber
+  );
+
+  if (currentIndex === -1) {
+    return "";
+  }
+
+  const start = matches[currentIndex].index;
+  const end = matches[currentIndex + 1]
+    ? matches[currentIndex + 1].index
+    : savedCalendarText.length;
+
+  return savedCalendarText.slice(start, end).trim();
+}
 
       loadSavedCalendar();
 
