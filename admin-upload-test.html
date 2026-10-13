@@ -102,30 +102,14 @@
   Checking administrator access...
 </p>
 
-  <button
-  id="testExtractionButton"
-  type="button"
-  hidden>
-  Test Administrator Connection
-</button>
-      
-  </form>
-
-  <p id="message" role="status"
-   aria-live="polite">
-  Checking administrator access...
-</p>
-
-  
-    <script type="module">
-  import { createClient } from
-    "https://esm.sh/@supabase/supabase-js@2";
-
-  const supabaseUrl =
-    "https://atzbisporfxvwqqrthje.supabase.co";
-
-  const supabaseKey =
-    "sb_publishable__P_r4py9kqhEigCBUQXMkw_v6RzZ2VJ";
+  <section id="calendarReview" hidden>
+  <h2>Review Calendar Activities</h2>
+  <p>
+    Review all activities for each day
+    before approving the calendar.
+  </p>
+  <div id="reviewDay"></div>
+</section>
   
     <script type="module">
   import { createClient } from
