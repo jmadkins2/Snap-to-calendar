@@ -182,12 +182,7 @@ const uploadButton =
   async function checkAdministratorAccess() {
     const { data: userData, error: userError } =
       await supabase.auth.getUser();
-    
-    document.getElementById("nextDayButton")
-  .addEventListener("click", function() {
-    document.getElementById("reviewDate")
-      .textContent = "October 2, 2026";
-  });
+   
 
   document.getElementById("approveDayButton")
   .addEventListener("click", function() {
@@ -222,6 +217,11 @@ const uploadButton =
   }
 
   checkAdministratorAccess();
+  document.getElementById("nextDayButton")
+  .addEventListener("click", function() {
+    document.getElementById("reviewDate")
+      .textContent = "October 2, 2026";
+  });
       
     document.getElementById("testExtractionButton")
   .addEventListener("click", async function() {
@@ -234,6 +234,7 @@ const uploadButton =
       const { data, error } =
         await supabase.functions.invoke(
           "extract-calendar",
+          
           { body: {} }
         );
 
