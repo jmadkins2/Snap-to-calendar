@@ -181,6 +181,12 @@ const uploadButton =
     const { data: userData, error: userError } =
       await supabase.auth.getUser();
 
+  document.getElementById("approveDayButton")
+  .addEventListener("click", function() {
+    document.getElementById("dayApprovalStatus")
+      .textContent = "October 1 review confirmed (test only).";
+  });
+
     if (userError || !userData.user) {
       message.textContent =
         "Please sign in as an administrator first.";
