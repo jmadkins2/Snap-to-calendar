@@ -276,8 +276,7 @@ console.log(
       data.extracted_text.length,
       "characters"
     );
-  }
-}
+
 const activityLines = octoberFirst
   .split("\n")
   .slice(1)
@@ -296,7 +295,9 @@ activityLines.forEach(line => {
   item.style.borderBottom = "1px solid #ddd";
   activityList.appendChild(item);
 });
-      
+  }
+}
+    
       
       function getCalendarDay(dayNumber) {
   if (!savedCalendarText) {
