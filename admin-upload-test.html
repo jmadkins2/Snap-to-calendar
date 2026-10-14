@@ -231,8 +231,24 @@ document.getElementById("nextDayButton")
     document.getElementById("reviewDate")
       .textContent = "October 2, 2026";
 
-    document.getElementById("reviewActivities")
-      .textContent = dayText;
+const activityLines = dayText
+  .split("\n")
+  .slice(1)
+  .map(line => line.trim())
+  .filter(line => line.startsWith("-"));
+
+const activityList =
+  document.getElementById("reviewActivities");
+
+activityList.replaceChildren();
+
+activityLines.forEach(line => {
+  const item = document.createElement("li");
+  item.textContent = line.replace(/^-\s*/, "");
+  item.style.padding = "8px 0";
+  item.style.borderBottom = "1px solid #ddd";
+  activityList.appendChild(item);
+});;
   });
       let savedCalendarText = "";
       
