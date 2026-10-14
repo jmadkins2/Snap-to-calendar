@@ -218,6 +218,8 @@ const uploadButton =
   }
 
   checkAdministratorAccess();
+
+let currentReviewDay = 1;
       
 document.getElementById("nextDayButton")
   .addEventListener("click", function() {
@@ -267,6 +269,12 @@ activityLines.forEach(line => {
 
   if (data?.extracted_text) {
     savedCalendarText = data.extracted_text;
+    const octoberFirst = getCalendarDay(1);
+
+console.log(
+  "October 1 loaded from Supabase:",
+  octoberFirst
+);
     console.log(
       "Saved October calendar loaded:",
       data.extracted_text.length,
