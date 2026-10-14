@@ -253,7 +253,7 @@ activityLines.forEach(line => {
       async function loadSavedCalendar() {
   const { data, error } = await supabase
     .from("calendar_imports")
-    .select("extracted_text")
+.select("extracted_text, calendar_month")
     .eq("import_id", 16)
     .eq("community_id", 1)
     .single();
