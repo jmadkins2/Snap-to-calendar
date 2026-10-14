@@ -218,22 +218,22 @@ const uploadButton =
   }
 
   checkAdministratorAccess();
-  document.getElementById("nextDayButton")
+      
+document.getElementById("nextDayButton")
   .addEventListener("click", function() {
+    const dayText = getCalendarDay(2);
+
+    if (!dayText) {
+      alert("October 2 activities are not available yet.");
+      return;
+    }
+
     document.getElementById("reviewDate")
       .textContent = "October 2, 2026";
 
     document.getElementById("reviewActivities")
-      .innerHTML = `
-       <li>8:30 — Mass - Channel 16 (CH)</li>
-<li>9:30 — Trip To SuperWalmart &amp; Aldi(T)</li>
-<li>10:00 — Bible Study w/Pastor Dave - (Crossroads)</li>
-<li>10:00 — Olli Class "Let's Learn About Canada" (A)</li>
-<li>2:00 — Friday Movie Matinee - (M)</li>
-<li>2:30 — Bucs vs Packers Tailgate Party (CDR)</li>
-      `;
+      .textContent = dayText;
   });
-
       let savedCalendarText = "";
       
       async function loadSavedCalendar() {
