@@ -267,6 +267,16 @@ activityLines.forEach(line => {
   if (data?.extracted_text) {
     savedCalendarText = data.extracted_text;
     savedCalendarMonth = data.calendar_month;
+    const [year, month] = savedCalendarMonth.split("-").map(Number);
+
+const reviewDate = new Date(year, month - 1, 1);
+
+document.getElementById("reviewDate").textContent =
+  reviewDate.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric"
+  });
     const octoberFirst = getCalendarDay(1);
 
 console.log(
