@@ -249,6 +249,7 @@ activityLines.forEach(line => {
 });;
   });
       let savedCalendarText = "";
+      let savedCalendarMonth = "";
       
       async function loadSavedCalendar() {
   const { data, error } = await supabase
@@ -265,6 +266,7 @@ activityLines.forEach(line => {
 
   if (data?.extracted_text) {
     savedCalendarText = data.extracted_text;
+    savedCalendarMonth = data.calendar_month;
     const octoberFirst = getCalendarDay(1);
 
 console.log(
