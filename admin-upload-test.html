@@ -356,8 +356,11 @@ activityLines.forEach(line => {
     ? matches[currentIndex + 1].index
     : savedCalendarText.length;
 
-  return savedCalendarText.slice(start, end).trim();
-}
+return savedCalendarText
+  .slice(start, end)
+  .split("\n---")[0]
+  .trim();
+      }
 
       loadSavedCalendar();
       window.testCalendarDay = getCalendarDay;
