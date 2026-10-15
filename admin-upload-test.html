@@ -228,6 +228,17 @@ const dayText = getCalendarDay(nextDay);
       return;
     }
     currentReviewDay = nextDay;
+
+    document.getElementById("approveDayButton").textContent =
+  "Approve " + new Date(
+    Number(savedCalendarMonth.split("-")[0]),
+    Number(savedCalendarMonth.split("-")[1]) - 1,
+    currentReviewDay
+  ).toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric"
+  });
+    
 const [year, month] = savedCalendarMonth.split("-").map(Number);
 
 const nextDate = new Date(year, month - 1, currentReviewDay);
