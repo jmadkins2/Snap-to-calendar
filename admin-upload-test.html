@@ -184,8 +184,9 @@ const uploadButton =
   document.getElementById("approveDayButton")
   .addEventListener("click", function() {
     document.getElementById("dayApprovalStatus")
-      .textContent = "October 1 review confirmed (test only).";
-  });
+.textContent =
+  document.getElementById("reviewDate").textContent +
+  " review confirmed (test only).";  });
 
     if (userError || !userData.user) {
       message.textContent =
