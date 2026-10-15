@@ -210,6 +210,13 @@ const { error: approvalError } = await supabase
 if (approvalError) {
   console.error("Approval could not be saved:", approvalError);
 
+  if (approvalError.code === "23505") {
+  document.getElementById("dayApprovalStatus").textContent =
+    document.getElementById("reviewDate").textContent +
+    " was already approved.";
+  return;
+}
+
   document.getElementById("dayApprovalStatus").textContent =
     "Approval could not be saved. Please try again.";
   return;
