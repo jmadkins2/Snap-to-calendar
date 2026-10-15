@@ -228,6 +228,7 @@ const dayText = getCalendarDay(nextDay);
       return;
     }
     currentReviewDay = nextDay;
+    document.getElementById("dayApprovalStatus").textContent = "";
 
     document.getElementById("approveDayButton").textContent =
   "Approve " + new Date(
