@@ -315,6 +315,17 @@ activityLines.forEach(line => {
       let savedCalendarMonth = "";
       let approvedDays = new Set();
 
+      function isCurrentDayApproved() {
+  const [year, month] = savedCalendarMonth.split("-").map(Number);
+
+  const date =
+    year + "-" +
+    String(month).padStart(2, "0") + "-" +
+    String(currentReviewDay).padStart(2, "0");
+
+  return approvedDays.has(date);
+}
+
       async function loadApprovedDays() {
   const { data, error } = await supabase
     .from("calendar_day_approvals")
@@ -349,6 +360,12 @@ activityLines.forEach(line => {
     savedCalendarText = data.extracted_text;
     savedCalendarMonth = data.calendar_month;
     await loadApprovedDays();
+
+if (isCurrentDayApproved()) {
+  document.getElementById("dayApprovalStatus").textContent =
+    "This day has already been approved.";
+}
+    
     const [year, month] = savedCalendarMonth.split("-").map(Number);
 
 const reviewDate = new Date(year, month - 1, 1);
