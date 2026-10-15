@@ -313,6 +313,24 @@ activityLines.forEach(line => {
   });
       let savedCalendarText = "";
       let savedCalendarMonth = "";
+      let approvedDays = new Set();
+
+      async function loadApprovedDays() {
+  const { data, error } = await supabase
+    .from("calendar_day_approvals")
+    .select("calendar_date")
+    .eq("import_id", 16)
+    .eq("community_id", 1);
+
+  if (error) {
+    console.error("Could not load approvals:", error);
+    return;
+  }
+
+  approvedDays = new Set(
+    (data || []).map(row => row.calendar_date)
+  );
+}
       
       async function loadSavedCalendar() {
   const { data, error } = await supabase
@@ -330,6 +348,7 @@ activityLines.forEach(line => {
   if (data?.extracted_text) {
     savedCalendarText = data.extracted_text;
     savedCalendarMonth = data.calendar_month;
+    await loadApprovedDays();
     const [year, month] = savedCalendarMonth.split("-").map(Number);
 
 const reviewDate = new Date(year, month - 1, 1);
