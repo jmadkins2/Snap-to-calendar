@@ -224,7 +224,9 @@ const { error: approvalError } = await supabase
   return;
     
 }
+    
     approvedDays.add(approvalDate);
+    updateApprovalProgress();
     
     document.getElementById("dayApprovalStatus")
 .textContent =
@@ -322,7 +324,15 @@ activityLines.forEach(line => {
   });
       let savedCalendarText = "";
       let savedCalendarMonth = "";
-      let approvedDays = new Set();
+      let approvedDays = new Set();function updateApprovalProgress() {
+  if (!savedCalendarMonth) return;
+
+  const [year, month] = savedCalendarMonth.split("-").map(Number);
+  const daysInMonth = new Date(year, month, 0).getDate();
+
+  document.getElementById("approvalProgress").textContent =
+    approvedDays.size + " of " + daysInMonth + " days approved";
+}      
 
       function isCurrentDayApproved() {
   const [year, month] = savedCalendarMonth.split("-").map(Number);
@@ -369,6 +379,8 @@ activityLines.forEach(line => {
     savedCalendarText = data.extracted_text;
     savedCalendarMonth = data.calendar_month;
     await loadApprovedDays();
+
+    updateApprovalProgress();
 
 if (isCurrentDayApproved()) {
   document.getElementById("dayApprovalStatus").textContent =
