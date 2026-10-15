@@ -271,6 +271,11 @@ const dayText = getCalendarDay(nextDay);
     currentReviewDay = nextDay;
     document.getElementById("dayApprovalStatus").textContent = "";
 
+if (isCurrentDayApproved()) {
+  document.getElementById("dayApprovalStatus").textContent =
+    "This day has already been approved.";
+}
+  
     document.getElementById("approveDayButton").textContent =
   "Approve " + new Date(
     Number(savedCalendarMonth.split("-")[0]),
