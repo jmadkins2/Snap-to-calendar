@@ -183,10 +183,44 @@ const uploadButton =
 
   document.getElementById("approveDayButton")
   .addEventListener("click", async function() {
+const [year, month] = savedCalendarMonth.split("-").map(Number);
+
+const approvalDate =
+  year + "-" +
+  String(month).padStart(2, "0") + "-" +
+  String(currentReviewDay).padStart(2, "0");
+
+const { data: userData, error: userError } =
+  await supabase.auth.getUser();
+
+if (userError || !userData.user) {
+  document.getElementById("dayApprovalStatus").textContent =
+    "Please sign in as an administrator.";
+  return;
+}
+const { error: approvalError } = await supabase
+  .from("calendar_day_approvals")
+  .insert({
+    import_id: 16,
+    community_id: 1,
+    calendar_date: approvalDate,
+    approved_by: userData.user.id
+  });
+
+if (approvalError) {
+  console.error("Approval could not be saved:", approvalError);
+
+  document.getElementById("dayApprovalStatus").textContent =
+    "Approval could not be saved. Please try again.";
+  return;
+}
+    
     document.getElementById("dayApprovalStatus")
 .textContent =
   document.getElementById("reviewDate").textContent +
-  " review confirmed (test only).";  });
+" approval saved successfully.";
+  
+  });
 
     if (userError || !userData.user) {
       message.textContent =
