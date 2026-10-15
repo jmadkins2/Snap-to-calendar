@@ -281,8 +281,7 @@ let currentReviewDay = 1;
     document.getElementById("nextDayButton").click();
   });
       
-document.getElementById("nextDayButton")
-.addEventListener("click", async function() {
+document.getElementById("nextDayButton").addEventListener("click", async function() {
   const nextDay = currentReviewDay + 1;
 const dayText = getCalendarDay(nextDay);
     
@@ -319,24 +318,7 @@ document.getElementById("reviewDate").textContent =
     year: "numeric"
   });
 
-const activityLines = dayText
-  .split("\n")
-  .slice(1)
-  .map(line => line.trim())
-  .filter(line => line.startsWith("-"));
-
-const activityList =
-  document.getElementById("reviewActivities");
-
-activityList.replaceChildren();
-
-activityLines.forEach(line => {
-  const item = document.createElement("li");
-  item.textContent = line.replace(/^-\s*/, "");
-  item.style.padding = "8px 0";
-  item.style.borderBottom = "1px solid #ddd";
-  activityList.appendChild(item);
-});;
+displayReviewActivities(dayText);
   });
       let savedCalendarText = "";
       let savedCalendarMonth = "";
@@ -449,8 +431,38 @@ console.log(
 displayReviewActivities(octoberFirst);
     
 function displayReviewActivities(dayText) {
-displayReviewActivities(dayText);
-  
+  const activityLines = dayText
+    .split("\n")
+    .slice(1)
+    .map(line => line.trim())
+    .filter(line => line.startsWith("-"));
+
+  const activityList =
+    document.getElementById("reviewActivities");
+
+  activityList.replaceChildren();
+
+  activityLines.forEach((line, index) => {
+    const item = document.createElement("li");
+
+    const activityText = document.createElement("span");
+    activityText.textContent = line.replace(/^-\s*/, "");
+
+    const editButton = document.createElement("button");
+    editButton.type = "button";
+    editButton.textContent = "Edit";
+    editButton.dataset.activityPosition = String(index + 1);
+    editButton.style.marginLeft = "12px";
+
+    item.appendChild(activityText);
+    item.appendChild(editButton);
+
+    item.style.padding = "8px 0";
+    item.style.borderBottom = "1px solid #ddd";
+
+    activityList.appendChild(item);
+  });
+}  
   function getCalendarDay(dayNumber) {
   if (!savedCalendarText) {
     return "";
