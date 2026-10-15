@@ -219,15 +219,24 @@ let currentReviewDay = 1;
       
 document.getElementById("nextDayButton")
   .addEventListener("click", function() {
-    const dayText = getCalendarDay(2);
-
+const nextDay = currentReviewDay + 1;
+const dayText = getCalendarDay(nextDay);
+    
     if (!dayText) {
-      alert("October 2 activities are not available yet.");
+    alert("No activities were found for the next day.");
       return;
     }
+    currentReviewDay = nextDay;
+const [year, month] = savedCalendarMonth.split("-").map(Number);
 
-    document.getElementById("reviewDate")
-      .textContent = "October 2, 2026";
+const nextDate = new Date(year, month - 1, currentReviewDay);
+
+document.getElementById("reviewDate").textContent =
+  nextDate.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric"
+  });
 
 const activityLines = dayText
   .split("\n")
