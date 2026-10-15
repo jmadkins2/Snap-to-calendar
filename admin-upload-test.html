@@ -206,12 +206,10 @@ const { error: approvalError } = await supabase
     calendar_date: approvalDate,
     approved_by: userData.user.id
   });
-
-if (approvalError) {
-
-  approvedDays.add(approvalDate);
   
-  approvedDays.add(approvalDate);console approvedDays.add(approvalDate);console.error("Approval could not be saved:", approvalError);
+  if (approvalError) {
+  console.error("Approval could not be saved:", approvalError);
+
 
   if (approvalError.code === "23505") {
   document.getElementById("dayApprovalStatus").textContent =
@@ -223,7 +221,9 @@ if (approvalError) {
   document.getElementById("dayApprovalStatus").textContent =
     "Approval could not be saved. Please try again.";
   return;
+    
 }
+    approvedDays.add(approvalDate);
     
     document.getElementById("dayApprovalStatus")
 .textContent =
