@@ -182,7 +182,7 @@ const uploadButton =
    
 
   document.getElementById("approveDayButton")
-  .addEventListener("click", function() {
+  .addEventListener("click", async function() {
     document.getElementById("dayApprovalStatus")
 .textContent =
   document.getElementById("reviewDate").textContent +
@@ -219,8 +219,8 @@ const uploadButton =
 let currentReviewDay = 1;
       
 document.getElementById("nextDayButton")
-  .addEventListener("click", function() {
-const nextDay = currentReviewDay + 1;
+.addEventListener("click", async function() {
+  const nextDay = currentReviewDay + 1;
 const dayText = getCalendarDay(nextDay);
     
     if (!dayText) {
