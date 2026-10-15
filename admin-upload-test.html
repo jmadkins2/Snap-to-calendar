@@ -267,6 +267,19 @@ const { error: approvalError } = await supabase
   checkAdministratorAccess();
 
 let currentReviewDay = 1;
+
+    document.getElementById("nextUnapprovedButton")
+  .addEventListener("click", function() {
+    const nextDay = findNextUnapprovedDay();
+
+    if (nextDay === null) {
+      alert("There are no more unapproved days ahead.");
+      return;
+    }
+
+    currentReviewDay = nextDay - 1;
+    document.getElementById("nextDayButton").click();
+  });
       
 document.getElementById("nextDayButton")
 .addEventListener("click", async function() {
