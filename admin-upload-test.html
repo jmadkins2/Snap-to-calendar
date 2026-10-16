@@ -208,7 +208,7 @@ if (userError || !userData.user) {
 const { error: approvalError } = await supabase
   .from("calendar_day_approvals")
   .insert({
-    import_id: 16,
+    import_id: currentImportId,
     community_id: 1,
     calendar_date: approvalDate,
     approved_by: userData.user.id
@@ -381,6 +381,7 @@ await displayReviewActivities(dayText);
   });
       let savedCalendarText = "";
       let savedCalendarMonth = "";
+      let currentImportId = 16;
       let approvedDays = new Set();function updateApprovalProgress() {
   if (!savedCalendarMonth) return;
 
@@ -428,7 +429,7 @@ function findNextUnapprovedDay() {
   const { data, error } = await supabase
     .from("calendar_day_approvals")
     .select("calendar_date")
-    .eq("import_id", 16)
+    .eq("import_id", currentImportId)
     .eq("community_id", 1);
 
   if (error) {
@@ -445,7 +446,7 @@ function findNextUnapprovedDay() {
   const { data, error } = await supabase
     .from("calendar_imports")
 .select("extracted_text, calendar_month")
-    .eq("import_id", 16)
+    .eq("import_id", currentImportId)
     .eq("community_id", 1)
     .single();
 
@@ -503,7 +504,7 @@ async function displayReviewActivities(dayText) {
     await supabase
       .from("activity_corrections")
       .select("activity_position, corrected_text")
-      .eq("import_id", 16)
+      .eq("import_id", currentImportId)
       .eq("community_id", 1)
       .eq("calendar_date", reviewDate);
 
@@ -584,7 +585,7 @@ if (userError || !userData.user) {
 const { error: saveError } = await supabase
   .from("activity_corrections")
   .upsert({
-    import_id: 16,
+    import_id: currentImportId,
     community_id: 1,
     calendar_date: correctionDate,
     activity_position: index + 1,
