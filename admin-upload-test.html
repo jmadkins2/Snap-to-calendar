@@ -116,7 +116,39 @@
     <button id="approveDayButton" type="button">
   Approve October 1
 </button>
-<button id="nextDayButton" type="button">
+<button id="previousDayButton" type="button">← Previous Day</button>
+document.getElementById("previousDayButton")
+  .addEventListener("click", async function() {
+    if (currentReviewDay <= 1) {
+      alert("You are already on the first day.");
+      return;
+    }
+
+    currentReviewDay -= 1;
+
+    const [year, month] = savedCalendarMonth.split("-").map(Number);
+    const reviewDate = new Date(year, month - 1, currentReviewDay);
+
+    document.getElementById("reviewDate").textContent =
+      reviewDate.toLocaleDateString("en-US", {
+        month: "long", day: "numeric", year: "numeric"
+      });
+
+    document.getElementById("approveDayButton").textContent =
+      "Approve " + reviewDate.toLocaleDateString("en-US", {
+        month: "long", day: "numeric"
+      });
+
+    document.getElementById("dayApprovalStatus").textContent =
+      isCurrentDayApproved()
+        ? "This day has already been approved."
+        : "";
+
+    await displayReviewActivities(getCalendarDay(currentReviewDay));
+  });
+
+  
+  <button id="nextDayButton" type="button">
   Next Day →
 </button>
   <button id="nextUnapprovedButton" type="button">
