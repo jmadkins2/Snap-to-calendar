@@ -456,6 +456,19 @@ function displayReviewActivities(dayText) {
     editButton.dataset.activityPosition = String(index + 1);
     editButton.style.marginLeft = "12px";
 
+    editButton.addEventListener("click", function() {
+  const correction = prompt(
+    "Correct the AI transcription to match the printed calendar:",
+    activityText.textContent
+  );
+
+  if (correction === null) {
+    return;
+  }
+
+  alert("Correction entered. Saving will be added next.");
+});
+
     item.appendChild(activityText);
     item.appendChild(editButton);
 
