@@ -476,21 +476,20 @@ document.getElementById("reviewDate").textContent =
     day: "numeric",
     year: "numeric"
   });
-    const octoberFirst = getCalendarDay(1);
+    const firstDayActivities = getCalendarDay(1);
 
 console.log(
-  "October 1 loaded from Supabase:",
-  octoberFirst
+  "First calendar day loaded from Supabase:",
+  firstDayActivities
 );
-    console.log(
-      "Saved October calendar loaded:",
-      data.extracted_text.length,
-      "characters"
-    );
 
-       await displayReviewActivities(octoberFirst);
+console.log(
+  "Saved calendar loaded:",
+  data.extracted_text.length,
+  "characters"
+);
+await displayReviewActivities(firstDayActivities);
   }
-}
     
 async function displayReviewActivities(dayText) {
   const [year, month] = savedCalendarMonth.split("-").map(Number);
