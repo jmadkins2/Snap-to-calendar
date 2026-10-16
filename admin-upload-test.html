@@ -372,7 +372,7 @@ const nextDate = new Date(year, month - 1, currentReviewDay);
 
 document.getElementById("reviewDate").textContent =
   nextDate.toLocaleDateString("en-US", {
-    month: "long",
+    month:  "long",
     day: "numeric",
     year: "numeric"
   });
@@ -381,7 +381,7 @@ await displayReviewActivities(dayText);
   });
       let savedCalendarText = "";
       let savedCalendarMonth = "";
-      let currentImportId = 16;
+      let currentImportId = null;
       let approvedDays = new Set();function updateApprovalProgress() {
   if (!savedCalendarMonth) return;
 
@@ -442,18 +442,23 @@ function findNextUnapprovedDay() {
   );
 }
       
-      async function loadSavedCalendar() {
   const { data, error } = await supabase
-    .from("calendar_imports")
-.select("extracted_text, calendar_month")
-    .eq("import_id", currentImportId)
-    .eq("community_id", 1)
-    .single();
+  .from("calendar_imports")
+  .select("import_id, extracted_text, calendar_month")
+  .eq("community_id", 1)
+  .not("extracted_text", "is", null)
+  .order("import_id", { ascending: false })
+  .limit(1)
+  .single();
 
   if (error) {
     console.error("Could not load saved calendar:", error);
     return;
   }
+
+      currentImportId = data.import_id;
+console.log("Selected calendar import:", currentImportId);
+
 
   if (data?.extracted_text) {
     savedCalendarText = data.extracted_text;
