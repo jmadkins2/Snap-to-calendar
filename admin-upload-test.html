@@ -330,15 +330,26 @@ document.getElementById("previousDayButton")
 
     await displayReviewActivities(getCalendarDay(currentReviewDay));
   });
+
+      
       
 document.getElementById("nextDayButton").addEventListener("click", async function() {
+if (!savedCalendarMonth) {
+  alert("The calendar is still loading. Please try again.");
+  return;
+}
   const nextDay = currentReviewDay + 1;
+const [year, month] = savedCalendarMonth.split("-").map(Number);
+const daysInMonth = new Date(year, month, 0).getDate();
+
+if (nextDay > daysInMonth) {
+  alert("You've reached the last day of this calendar.");
+  return;
+}
+
 const dayText = getCalendarDay(nextDay);
-    
-    if (!dayText) {
-      alert("You've reached the last day of this calendar.");      return;
-    }
-    currentReviewDay = nextDay;
+  
+  currentReviewDay = nextDay;
     document.getElementById("dayApprovalStatus").textContent = "";
 
 if (isCurrentDayApproved()) {
@@ -356,7 +367,6 @@ if (isCurrentDayApproved()) {
     day: "numeric"
   });
     
-const [year, month] = savedCalendarMonth.split("-").map(Number);
 
 const nextDate = new Date(year, month - 1, currentReviewDay);
 
@@ -516,6 +526,11 @@ async function displayReviewActivities(dayText) {
     document.getElementById("reviewActivities");
 
   activityList.replaceChildren();
+  if (activityLines.length === 0) {
+  const item = document.createElement("li");
+  item.textContent = "No activities scheduled for this day.";
+  activityList.appendChild(item);
+}
 
   activityLines.forEach((line, index) => {
     const item = document.createElement("li");
