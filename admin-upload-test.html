@@ -463,8 +463,15 @@ function displayReviewActivities(dayText) {
   );
 
   if (correction === null) {
+    if (correction.trim() === "") {
+    alert("The activity description cannot be blank.");
     return;
-  }
+}
+
+if (correction.trim() === activityText.textContent.trim()) {
+  alert("No changes were made.");
+  return;
+}  }
 
   alert("Correction entered. Saving will be added next.");
 });
