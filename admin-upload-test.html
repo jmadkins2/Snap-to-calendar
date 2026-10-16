@@ -336,8 +336,7 @@ document.getElementById("nextDayButton").addEventListener("click", async functio
 const dayText = getCalendarDay(nextDay);
     
     if (!dayText) {
-    alert("No activities were found for the next day.");
-      return;
+      alert("You've reached the last day of this calendar.");      return;
     }
     currentReviewDay = nextDay;
     document.getElementById("dayApprovalStatus").textContent = "";
