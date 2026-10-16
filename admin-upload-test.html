@@ -456,7 +456,7 @@ function displayReviewActivities(dayText) {
     editButton.dataset.activityPosition = String(index + 1);
     editButton.style.marginLeft = "12px";
 
-    editButton.addEventListener("click", function() {
+    editButton.addEventListener("click", async function() {
   const correction = prompt(
     "Correct the AI transcription to match the printed calendar:",
     activityText.textContent
@@ -473,8 +473,53 @@ if (correction.trim() === activityText.textContent.trim()) {
   return;
 }  }
 
-  alert("Correction entered. Saving will be added next.");
+});const [year, month] = savedCalendarMonth.split("-").map(Number);
+
+const correctionDate =
+  year + "-" +
+  String(month).padStart(2, "0") + "-" +
+  String(currentReviewDay).padStart(2, "0");
+
+const { data: userData, error: userError } =
+  await supabase.auth.getUser();
+
+if (userError || !userData.user) {
+  alert("Please sign in as an administrator.");
+  return;
+}
+
+const { error: saveError } = await supabase
+  .from("activity_corrections")
+  .upsert({
+    import_id: 16,
+    community_id: 1,
+    calendar_date: correctionDate,
+    activity_position: index + 1,
+    corrected_text: correction.trim(),
+    corrected_by: userData.user.id,
+    corrected_at: new Date().toISOString()
+  }, {
+    onConflict: "import_id,calendar_date,activity_position"
+  });
+
+if (saveError) {
+  console.error("Correction save failed:", saveError);
+  alert("Correction could not be saved. No changes were made.");
+  return;
+}
+
+activityText.textContent = correction.trim();
+
+approvedDays.delete(correctionDate);
+updateApprovalProgress();
+
+document.getElementById("dayApprovalStatus").textContent =
+  "Correction saved. This day must be approved again.";
+
+alert("Correction saved successfully.");
+
 });
+
 
     item.appendChild(activityText);
     item.appendChild(editButton);
