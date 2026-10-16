@@ -432,13 +432,36 @@ console.log(
   }
 }
     
-function displayReviewActivities(dayText) {
+async function displayReviewActivities(dayText) {
+  const [year, month] = savedCalendarMonth.split("-").map(Number);
+
+  const reviewDate =
+    year + "-" +
+    String(month).padStart(2, "0") + "-" +
+    String(currentReviewDay).padStart(2, "0");
+
+  const { data: savedCorrections, error: correctionsError } =
+    await supabase
+      .from("activity_corrections")
+      .select("activity_position, corrected_text")
+      .eq("import_id", 16)
+      .eq("community_id", 1)
+      .eq("calendar_date", reviewDate);
+
+  if (correctionsError) {
+    console.error("Could not load corrections:", correctionsError);
+    alert("Saved corrections could not be loaded. Please try again.");
+    return;
+  }
+  
   const activityLines = dayText
     .split("\n")
     .slice(1)
     .map(line => line.trim())
     .filter(line => line.startsWith("-"));
 
+
+  
   const activityList =
     document.getElementById("reviewActivities");
 
@@ -448,7 +471,13 @@ function displayReviewActivities(dayText) {
     const item = document.createElement("li");
 
     const activityText = document.createElement("span");
-    activityText.textContent = line.replace(/^-\s*/, "");
+    const savedCorrection = (savedCorrections || []).find(
+  correction => correction.activity_position === index + 1
+);
+
+activityText.textContent = savedCorrection
+  ? savedCorrection.corrected_text
+  : line.replace(/^-\s*/, "");
 
     const editButton = document.createElement("button");
     editButton.type = "button";
