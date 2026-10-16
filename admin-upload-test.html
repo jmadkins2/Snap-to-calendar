@@ -272,7 +272,7 @@ const { error: approvalError } = await supabase
 let currentReviewDay = 1;
 
     document.getElementById("nextUnapprovedButton")
-  .addEventListener("click", function() {
+  .addEventListener("click", async function() {
     const nextDay = findNextUnapprovedDay();
 
     if (nextDay === null) {
@@ -280,9 +280,26 @@ let currentReviewDay = 1;
       return;
     }
 
-    currentReviewDay = nextDay - 1;
-    document.getElementById("nextDayButton").click();
+    currentReviewDay = nextDay;
+const [year, month] = savedCalendarMonth.split("-").map(Number);
+const reviewDate = new Date(year, month - 1, currentReviewDay);
+
+document.getElementById("reviewDate").textContent =
+  reviewDate.toLocaleDateString("en-US", {
+    month: "long", day: "numeric", year: "numeric"
   });
+
+document.getElementById("approveDayButton").textContent =
+  "Approve " + reviewDate.toLocaleDateString("en-US", {
+    month: "long", day: "numeric"
+  });
+
+document.getElementById("dayApprovalStatus").textContent =
+  isCurrentDayApproved()
+    ? "This day has already been approved."
+    : "";
+
+await displayReviewActivities(getCalendarDay(currentReviewDay));  });
 
 document.getElementById("previousDayButton")
   .addEventListener("click", async function() {
@@ -371,9 +388,10 @@ function findNextUnapprovedDay() {
   const [year, month] = savedCalendarMonth.split("-").map(Number);
   const daysInMonth = new Date(year, month, 0).getDate();
 
-  for (let day = currentReviewDay + 1; day <= daysInMonth; day++) {
-    const date =
-      year + "-" +
+  for (let offset = 1; offset <= daysInMonth; offset++) {
+    const day = ((currentReviewDay - 1 + offset) % daysInMonth) + 1;
+
+    const date = year + "-" +
       String(month).padStart(2, "0") + "-" +
       String(day).padStart(2, "0");
 
