@@ -629,8 +629,14 @@ alert("Correction saved successfully.");
     return "";
   }
 
-  const dayPattern =
-    /^October\s+(\d{1,2}),\s+2026\b.*$/gm;
+    const [year, month] = savedCalendarMonth.split("-").map(Number);
+const monthName = new Date(year, month - 1, 1)
+  .toLocaleDateString("en-US", { month: "long" });
+
+const dayPattern = new RegExp(
+  "^" + monthName + "\\s+(\\d{1,2}),\\s+" + year + "\\b.*$",
+  "gm"
+);
 
   const matches = [...savedCalendarText.matchAll(dayPattern)];
 
