@@ -441,6 +441,7 @@ function findNextUnapprovedDay() {
     (data || []).map(row => row.calendar_date)
   );
 }
+  async function loadSavedCalendar() {
       
   const { data, error } = await supabase
   .from("calendar_imports")
@@ -663,7 +664,7 @@ return savedCalendarText
   .split("\n---")[0]
   .trim();
       }
-
+    
       loadSavedCalendar();
       window.testCalendarDay = getCalendarDay;
 
