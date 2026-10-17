@@ -196,7 +196,7 @@ async function loadLocations() {
 
   const { data, error } = await supabase
     .from("activity_locations")
-    .select("abbreviation, full_name")
+    .select("location_id, abbreviation, full_name")
     .eq("community_id", 1)
     .order("abbreviation");
 
@@ -217,6 +217,18 @@ async function loadLocations() {
     item.textContent =
       location.abbreviation + " — " + location.full_name;
 
+const editButton = document.createElement("button");
+
+editButton.type = "button";
+editButton.textContent = "Edit";
+editButton.style.marginLeft = "12px";
+
+editButton.addEventListener("click", function() {
+  alert("Editing location " + location.location_id);
+});
+
+item.appendChild(editButton);
+    
     locationList.appendChild(item);
   });
 }
