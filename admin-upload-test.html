@@ -112,6 +112,36 @@
   <ul id="locationList">
     <li>Locations will appear here.</li>
   </ul>
+
+  <h3>Add a Location</h3>
+
+<form id="addLocationForm">
+  <label for="locationAbbreviation">
+    Calendar Abbreviation
+  </label>
+  <input
+    id="locationAbbreviation"
+    type="text"
+    maxlength="20"
+    required
+  >
+
+  <label for="locationFullName">
+    Full Location Name
+  </label>
+  <input
+    id="locationFullName"
+    type="text"
+    maxlength="150"
+    required
+  >
+
+  <button type="submit">
+    Save Location
+  </button>
+</form>
+
+<p id="locationMessage" role="status"></p>
 </section>
   
   <section id="calendarReview">
@@ -190,6 +220,54 @@ async function loadLocations() {
     locationList.appendChild(item);
   });
 }
+
+document.getElementById("addLocationForm")
+  .addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const abbreviation = document
+      .getElementById("locationAbbreviation")
+      .value.trim().toUpperCase();
+
+    const fullName = document
+      .getElementById("locationFullName")
+      .value.trim();
+
+    const locationMessage =
+      document.getElementById("locationMessage");
+
+    if (!abbreviation || !fullName) {
+      locationMessage.textContent =
+        "Please enter both an abbreviation and a location name.";
+      return;
+    }
+
+    const { error } = await supabase
+      .from("activity_locations")
+      .insert({
+        community_id: 1,
+        abbreviation: abbreviation,
+        full_name: fullName
+      });
+
+    if (error) {
+      console.error("Could not save location:", error);
+
+      locationMessage.textContent =
+        error.code === "23505"
+          ? "That abbreviation already exists."
+          : "Could not save the location. Please try again.";
+
+      return;
+    }
+
+    locationMessage.textContent =
+      "Location saved successfully.";
+
+    document.getElementById("addLocationForm").reset();
+
+    await loadLocations();
+  });
       
   const allowedExtensions = [
     "pdf", "jpg", "jpeg", "png", "heic", "heif"
