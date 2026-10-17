@@ -102,6 +102,18 @@
   Checking administrator access...
 </p>
 
+<section id="locationDictionary">
+  <h2>Location Dictionary</h2>
+  <p>
+    Manage the abbreviations used on community calendars.
+    Residents will see the full location names.
+  </p>
+  <h3>Saved Locations</h3>
+  <ul id="locationList">
+    <li>Locations will appear here.</li>
+  </ul>
+</section>
+  
   <section id="calendarReview">
   <h2>Review Calendar Activities</h2>
 <p id="approvalProgress" role="status"></p>
@@ -146,7 +158,39 @@
     supabaseUrl,
     supabaseKey
   );
-    
+
+async function loadLocations() {
+  const locationList = document.getElementById("locationList");
+
+  locationList.replaceChildren();
+
+  const { data, error } = await supabase
+    .from("activity_locations")
+    .select("abbreviation, full_name")
+    .eq("community_id", 1)
+    .order("abbreviation");
+
+  if (error) {
+    console.error("Could not load locations:", error);
+    locationList.textContent = "Could not load locations.";
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    locationList.textContent = "No locations saved yet.";
+    return;
+  }
+
+  data.forEach(function(location) {
+    const item = document.createElement("li");
+
+    item.textContent =
+      location.abbreviation + " — " + location.full_name;
+
+    locationList.appendChild(item);
+  });
+}
+      
   const allowedExtensions = [
     "pdf", "jpg", "jpeg", "png", "heic", "heif"
   ];
@@ -268,6 +312,9 @@ const { error: approvalError } = await supabase
     message.textContent =
       "Administrator verified. You may select a calendar.";
     document.getElementById("testExtractionButton").hidden = false;
+
+        await loadLocations();
+    
   }
 
   checkAdministratorAccess();
