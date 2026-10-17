@@ -341,7 +341,7 @@ if (!savedCalendarMonth) {
   alert("The calendar is still loading. Please try again.");
   return;
 }
-  const nextDay = currentReviewDay + 1;
+const nextDay = currentReviewDay + 1;
 const [year, month] = savedCalendarMonth.split("-").map(Number);
 const daysInMonth = new Date(year, month, 0).getDate();
 
@@ -385,14 +385,24 @@ await displayReviewActivities(dayText);
       let savedCalendarText = "";
       let savedCalendarMonth = "";
       let currentImportId = null;
-      let approvedDays = new Set();function updateApprovalProgress() {
+      let approvedDays = new Set();
+      
+      function updateApprovalProgress() {
   if (!savedCalendarMonth) return;
 
   const [year, month] = savedCalendarMonth.split("-").map(Number);
   const daysInMonth = new Date(year, month, 0).getDate();
 
+  const publishButton = document.getElementById("publishCalendarButton");
+publishButton.disabled = approvedDays.size !== daysInMonth;
+publishButton.title = publishButton.disabled
+  ? "Approve all days before publishing."
+  : "All days approved. Ready for publication.";
+
   document.getElementById("approvalProgress").textContent =
     approvedDays.size + " of " + daysInMonth + " days approved";
+        
+  
 }      
       
 function findNextUnapprovedDay() {
