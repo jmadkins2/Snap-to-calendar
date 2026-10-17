@@ -224,7 +224,21 @@ editButton.textContent = "Edit";
 editButton.style.marginLeft = "12px";
 
 editButton.addEventListener("click", function() {
-  alert("Editing location " + location.location_id);
+  const newName = prompt(
+    "Enter the full location name for " + location.abbreviation + ":",
+    location.full_name
+  );
+
+  if (newName === null) {
+    return;
+  }
+
+  if (newName.trim() === "") {
+    alert("The location name cannot be blank.");
+    return;
+  }
+
+  alert("New name entered: " + newName.trim());
 });
 
 item.appendChild(editButton);
