@@ -894,10 +894,21 @@ document.getElementById("testSaveButton").addEventListener("click", async functi
         end_time: null,
         location: null,
         status: "scheduled"
-    }
+ }
 ]
-});
-      
+        });
+
+        if (error) {
+            alert("Database response:\n" + error.message);
+        } else {
+            alert("UNEXPECTED SUCCESS — please stop and tell me.");
+        }
+    } catch (error) {
+        alert("Test error:\n" + error.message);
+    } finally {
+        button.disabled = false;
+    }
+});      
       loadSavedCalendar();
       window.testCalendarDay = getCalendarDay;
 
