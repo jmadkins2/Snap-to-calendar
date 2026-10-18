@@ -612,7 +612,8 @@ function findNextUnapprovedDay() {
     .from("calendar_day_approvals")
     .select("calendar_date")
     .eq("import_id", currentImportId)
-    .eq("community_id", 1);
+    .eq("community_id", 1)
+    .not("activities_saved_at","is",null);
 
   if (error) {
     console.error("Could not load approvals:", error);
