@@ -858,29 +858,44 @@ document.getElementById("testSaveButton").addEventListener("click", async functi
         const { error } = await supabase.rpc("save_and_approve_day", {
             p_import_id: 16,
             p_calendar_date: "2026-10-01",
-            p_activities: [
-                {
-                    activity_position: 1,
-                    activity_name: "TEST INCORRECT ACTIVITY",
-                    reviewed_text: "Incorrect calendar wording",
-                    start_time: "10:00",
-                    end_time: null,
-                    location: null,
-                    status: "scheduled"
-                }
-            ]
-        });
-
-        if (error) {
-            alert("Database response:\n" + error.message);
-        } else {
-            alert("UNEXPECTED SUCCESS — please stop and tell me.");
-        }
-    } catch (error) {
-        alert("Test error:\n" + error.message);
-    } finally {
-        button.disabled = false;
+      p_activities: [
+    {
+        activity_position: 1,
+        activity_name: "Gift Nook Open",
+        reviewed_text: "DELIBERATELY INCORRECT TEXT",
+        start_time: "10:00",
+        end_time: null,
+        location: null,
+        status: "scheduled"
+    },
+    {
+        activity_position: 2,
+        activity_name: "Trip To Publix & Bealls At Tampa Palms",
+        reviewed_text: "DELIBERATELY INCORRECT TEXT",
+        start_time: "13:00",
+        end_time: null,
+        location: null,
+        status: "scheduled"
+    },
+    {
+        activity_position: 3,
+        activity_name: "BINGO",
+        reviewed_text: "DELIBERATELY INCORRECT TEXT",
+        start_time: "14:00",
+        end_time: null,
+        location: null,
+        status: "scheduled"
+    },
+    {
+        activity_position: 4,
+        activity_name: "Autumn Beverage Station & Jazz Social",
+        reviewed_text: "DELIBERATELY INCORRECT TEXT",
+        start_time: "15:00",
+        end_time: null,
+        location: null,
+        status: "scheduled"
     }
+]
 });
       
       loadSavedCalendar();
