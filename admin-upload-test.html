@@ -835,6 +835,18 @@ document.getElementById("confirmDayTimes").checked = false;
     updateCanceledLabel();
     item.appendChild(editButton);
 
+    const timeLabel = document.createElement("div");
+const timeMatch = activityText.textContent.match(/^(\d{1,2}):(\d{2})\b/);
+
+timeLabel.textContent = timeMatch
+  ? "Starting time: " + timeMatch[0] + " (AM/PM not yet confirmed)"
+  : "Starting time: Not recognized";
+
+timeLabel.style.marginTop = "6px";
+timeLabel.style.fontWeight = "bold";
+
+item.appendChild(timeLabel);
+
     item.style.padding = "8px 0";
     item.style.borderBottom = "1px solid #ddd";
 
