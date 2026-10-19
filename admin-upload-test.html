@@ -822,6 +822,19 @@ document.getElementById("confirmDayTimes").checked = false;
       activityText.textContent = correction.trim();
       updateCanceledLabel();
 
+      const updatedTime = activityText.textContent.match(/^(\d{1,2}):(\d{2})\b/);
+
+timeLabel.textContent = updatedTime
+  ? "Starting time: " + updatedTime[0] + " (AM/PM not yet confirmed)"
+  : "Starting time: Not recognized";
+
+amPmSelect.disabled = !updatedTime;
+
+if (updatedTime) {
+  const hour = Number(updatedTime[1]);
+  amPmSelect.value = (hour === 12 || hour <= 6) ? "PM" : "AM";
+}
+
       document.getElementById("confirmDayTimes").checked = false;
 
       approvedDays.delete(correctionDate);
