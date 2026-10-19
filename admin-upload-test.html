@@ -712,8 +712,7 @@ async function displayReviewActivities(dayText) {
     .filter(line => line.startsWith("-"));
 
 
-  
-  const a    document.getElementById("reviewActivities");
+  const activityList = document.getElementById("reviewActivities");
 
   activityList.replaceChildren();
   if (activityLines.length === 0) {
