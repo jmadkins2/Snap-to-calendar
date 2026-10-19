@@ -802,16 +802,18 @@ document.getElementById("dayApprovalStatus").textContent =
 alert("Correction saved successfully.");
 
 });
+
+    item.appendChild(activityText);
+
 if (/\bcancelled?\b/i.test(activityText.textContent)) {
     const canceledLabel = document.createElement("strong");
     canceledLabel.textContent = " — CANCELED";
     canceledLabel.style.marginLeft = "8px";
     item.appendChild(canceledLabel);
+}
 
-    
-
-    item.appendChild(activityText);
-    item.appendChild(editButton);
+item.appendChild(editButton);
+   
 }
     item.style.padding = "8px 0";
     item.style.borderBottom = "1px solid #ddd";
