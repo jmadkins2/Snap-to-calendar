@@ -464,7 +464,7 @@ document.getElementById("reviewDate").textContent =
   });
 
 document.getElementById("approveDayButton").textContent =
-  "Approve " + reviewDate.toLocaleDateString("en-US", {
+  "Approve and Save" + reviewDate.toLocaleDateString("en-US", {
     month: "long", day: "numeric"
   });
 
@@ -493,7 +493,7 @@ document.getElementById("previousDayButton")
       });
 
     document.getElementById("approveDayButton").textContent =
-      "Approve " + reviewDate.toLocaleDateString("en-US", {
+      "Approve and Save " + reviewDate.toLocaleDateString("en-US", {
         month: "long", day: "numeric"
       });
 
@@ -532,7 +532,7 @@ if (isCurrentDayApproved()) {
 }
   
     document.getElementById("approveDayButton").textContent =
-  "Approve " + new Date(
+  "Approve and Save " + new Date(
     Number(savedCalendarMonth.split("-")[0]),
     Number(savedCalendarMonth.split("-")[1]) - 1,
     currentReviewDay
