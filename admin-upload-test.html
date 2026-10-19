@@ -713,8 +713,7 @@ async function displayReviewActivities(dayText) {
 
 
   
-  const activityList =
-    document.getElementById("reviewActivities");
+  const a    document.getElementById("reviewActivities");
 
   activityList.replaceChildren();
   if (activityLines.length === 0) {
@@ -814,7 +813,7 @@ if (/\bcancelled?\b/i.test(activityText.textContent)) {
 
     item.appendChild(activityText);
     item.appendChild(editButton);
-
+}
     item.style.padding = "8px 0";
     item.style.borderBottom = "1px solid #ddd";
 
