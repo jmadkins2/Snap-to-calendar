@@ -893,6 +893,18 @@ amPmSelect.addEventListener("change", function () {
     
 item.appendChild(amPmSelect);
 
+    function updateDisplayedTime() {
+  const currentTime = activityText.textContent.match(/^(\d{1,2}):(\d{2})\b/);
+
+  if (currentTime) {
+    timeLabel.textContent =
+      "Starting time: " + currentTime[0] + " " + amPmSelect.value;
+  }
+}
+
+amPmSelect.addEventListener("change", updateDisplayedTime);
+updateDisplayedTime();
+
     item.style.padding = "8px 0";
     item.style.borderBottom = "1px solid #ddd";
 
