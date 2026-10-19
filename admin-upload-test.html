@@ -683,6 +683,8 @@ console.log(
 await displayReviewActivities(firstDayActivities);
   }
 }
+
+  
 async function displayReviewActivities(dayText) {
   const [year, month] = savedCalendarMonth.split("-").map(Number);
 
@@ -704,34 +706,49 @@ async function displayReviewActivities(dayText) {
     alert("Saved corrections could not be loaded. Please try again.");
     return;
   }
-  
+
   const activityLines = dayText
     .split("\n")
     .slice(1)
     .map(line => line.trim())
     .filter(line => line.startsWith("-"));
 
-
   const activityList = document.getElementById("reviewActivities");
-
   activityList.replaceChildren();
+
   if (activityLines.length === 0) {
-  const item = document.createElement("li");
-  item.textContent = "No activities scheduled for this day.";
-  activityList.appendChild(item);
-}
+    const item = document.createElement("li");
+    item.textContent = "No activities scheduled for this day.";
+    activityList.appendChild(item);
+  }
 
   activityLines.forEach((line, index) => {
     const item = document.createElement("li");
-
     const activityText = document.createElement("span");
-    const savedCorrection = (savedCorrections || []).find(
-  correction => correction.activity_position === index + 1
-);
 
-activityText.textContent = savedCorrection
-  ? savedCorrection.corrected_text
-  : line.replace(/^-\s*/, "");
+    const savedCorrection = (savedCorrections || []).find(
+      correction => correction.activity_position === index + 1
+    );
+
+    activityText.textContent = savedCorrection
+      ? savedCorrection.corrected_text
+      : line.replace(/^-\s*/, "");
+
+    const canceledLabel = document.createElement("strong");
+    canceledLabel.textContent = " — CANCELED";
+    canceledLabel.style.marginLeft = "8px";
+
+    function updateCanceledLabel() {
+      const isCanceled = /\bcancelled?\b/i.test(activityText.textContent);
+
+      if (isCanceled) {
+        if (!canceledLabel.isConnected) {
+          activityText.after(canceledLabel);
+        }
+      } else {
+        canceledLabel.remove();
+      }
+    }
 
     const editButton = document.createElement("button");
     editButton.type = "button";
@@ -739,88 +756,86 @@ activityText.textContent = savedCorrection
     editButton.dataset.activityPosition = String(index + 1);
     editButton.style.marginLeft = "12px";
 
-    editButton.addEventListener("click", async function() {
-  const correction = prompt(
-    "Correct the AI transcription to match the printed calendar:",
-    activityText.textContent
-  );
+    editButton.addEventListener("click", async function () {
+      const correction = prompt(
+        "Correct the AI transcription to match the printed calendar:",
+        activityText.textContent
+      );
 
-  if (correction === null) {
-    if (correction.trim() === "") {
-    alert("The activity description cannot be blank.");
-    return;
-}
+      if (correction === null) {
+        return;
+      }
 
-if (correction.trim() === activityText.textContent.trim()) {
-  alert("No changes were made.");
-  return;
-}  }
+      if (correction.trim() === "") {
+        alert("The activity description cannot be blank.");
+        return;
+      }
 
-const [year, month] = savedCalendarMonth.split("-").map(Number);
+      if (correction.trim() === activityText.textContent.trim()) {
+        alert("No changes were made.");
+        return;
+      }
 
-const correctionDate =
-  year + "-" +
-  String(month).padStart(2, "0") + "-" +
-  String(currentReviewDay).padStart(2, "0");
+      const [year, month] = savedCalendarMonth.split("-").map(Number);
 
-const { data: userData, error: userError } =
-  await supabase.auth.getUser();
+      const correctionDate =
+        year + "-" +
+        String(month).padStart(2, "0") + "-" +
+        String(currentReviewDay).padStart(2, "0");
 
-if (userError || !userData.user) {
-  alert("Please sign in as an administrator.");
-  return;
-}
+      const { data: userData, error: userError } =
+        await supabase.auth.getUser();
 
-const { error: saveError } = await supabase
-  .from("activity_corrections")
-  .upsert({
-    import_id: currentImportId,
-    community_id: 1,
-    calendar_date: correctionDate,
-    activity_position: index + 1,
-    corrected_text: correction.trim(),
-    corrected_by: userData.user.id,
-    corrected_at: new Date().toISOString()
-  }, {
-    onConflict: "import_id,calendar_date,activity_position"
-  });
+      if (userError || !userData.user) {
+        alert("Please sign in as an administrator.");
+        return;
+      }
 
-if (saveError) {
-  console.error("Correction save failed:", saveError);
-  alert("Correction could not be saved. No changes were made.");
-  return;
-}
+      const { error: saveError } = await supabase
+        .from("activity_corrections")
+        .upsert({
+          import_id: currentImportId,
+          community_id: 1,
+          calendar_date: correctionDate,
+          activity_position: index + 1,
+          corrected_text: correction.trim(),
+          corrected_by: userData.user.id,
+          corrected_at: new Date().toISOString()
+        }, {
+          onConflict: "import_id,calendar_date,activity_position"
+        });
 
-activityText.textContent = correction.trim();
+      if (saveError) {
+        console.error("Correction save failed:", saveError);
+        alert("Correction could not be saved. No changes were made.");
+        return;
+      }
 
-approvedDays.delete(correctionDate);
-updateApprovalProgress();
+      activityText.textContent = correction.trim();
+      updateCanceledLabel();
 
-document.getElementById("dayApprovalStatus").textContent =
-  "Correction saved. This day must be approved again.";
+      approvedDays.delete(correctionDate);
+      updateApprovalProgress();
 
-alert("Correction saved successfully.");
+      document.getElementById("dayApprovalStatus").textContent =
+        "Correction saved. This day must be approved again.";
 
-});
+      alert("Correction saved successfully.");
+    });
 
     item.appendChild(activityText);
+    updateCanceledLabel();
+    item.appendChild(editButton);
 
-if (/\bcancelled?\b/i.test(activityText.textContent)) {
-    const canceledLabel = document.createElement("strong");
-    canceledLabel.textContent = " — CANCELED";
-    canceledLabel.style.marginLeft = "8px";
-    item.appendChild(canceledLabel);
-}
-
-item.appendChild(editButton);
-   
-}
     item.style.padding = "8px 0";
     item.style.borderBottom = "1px solid #ddd";
 
     activityList.appendChild(item);
   });
-}  
+}
+    
+      
+      
   function getCalendarDay(dayNumber) {
   if (!savedCalendarText) {
     return "";
