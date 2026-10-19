@@ -872,6 +872,10 @@ if (timeMatch) {
 amPmSelect.setAttribute("aria-label", "Starting time AM or PM");
 amPmSelect.style.marginLeft = "10px";
 
+amPmSelect.addEventListener("change", function () {
+  document.getElementById("confirmDayTimes").checked = false;
+});
+    
 item.appendChild(amPmSelect);
 
     item.style.padding = "8px 0";
