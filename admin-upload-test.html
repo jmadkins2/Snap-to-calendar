@@ -199,11 +199,6 @@
 
 let locationDictionary = {};
 
-locationDictionary = {};
-
-data.forEach(function(location) {
-  locationDictionary[location.abbreviation] = location.full_name;
-});
       
 async function loadLocations() {
   const locationList = document.getElementById("locationList");
@@ -227,6 +222,12 @@ async function loadLocations() {
     return;
   }
 
+locationDictionary = {};
+
+data.forEach(function(location) {
+  locationDictionary[location.abbreviation] = location.full_name;
+});
+  
   data.forEach(function(location) {
     const item = document.createElement("li");
 
