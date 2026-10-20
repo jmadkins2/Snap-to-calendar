@@ -196,7 +196,10 @@
     supabaseUrl,
     supabaseKey
   );
-
+document.getElementById("confirmDayTimes").addEventListener("change", function () {
+  document.getElementById("approveDayButton").disabled = !this.checked;
+});
+      
 let locationDictionary = {};
 
       
