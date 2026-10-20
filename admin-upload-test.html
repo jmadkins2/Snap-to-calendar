@@ -830,6 +830,9 @@ document.getElementById("confirmDayTimes").checked = false;
 
       activityText.textContent = correction.trim();
       const correctedLocationMatch = activityText.textContent.match(/\(([A-Za-z]+)\)\s*$/);
+      const correctedFullLocation = correctedLocationMatch
+  ? locationDictionary[correctedLocationMatch[1].toUpperCase()]
+  : null;
       updateCanceledLabel();
 
       const updatedTime = activityText.textContent.match(/^(\d{1,2}):(\d{2})\b/);
