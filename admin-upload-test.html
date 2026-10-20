@@ -833,6 +833,14 @@ document.getElementById("confirmDayTimes").checked = false;
       const correctedFullLocation = correctedLocationMatch
   ? locationDictionary[correctedLocationMatch[1].toUpperCase()]
   : null;
+      if (correctedFullLocation) {
+  locationLabel.textContent = "Location: " + correctedFullLocation;
+  if (!locationLabel.isConnected) {
+    item.appendChild(locationLabel);
+  }
+} else {
+  locationLabel.remove();
+}
       updateCanceledLabel();
 
       const updatedTime = activityText.textContent.match(/^(\d{1,2}):(\d{2})\b/);
