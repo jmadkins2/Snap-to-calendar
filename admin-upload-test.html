@@ -860,6 +860,9 @@ updateDisplayedTime();
     item.appendChild(activityText);
     const locationLabel = document.createElement("div");
     const locationMatch = activityText.textContent.match(/\(([A-Za-z]+)\)\s*$/);
+    const fullLocation = locationMatch
+  ? locationDictionary[locationMatch[1].toUpperCase()]
+  : null;
     updateCanceledLabel();
     item.appendChild(editButton);
 
