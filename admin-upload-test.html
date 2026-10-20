@@ -875,8 +875,12 @@ updateDisplayedTime();
     const fullLocation = locationMatch
   ? locationDictionary[locationMatch[1].toUpperCase()]
   : null;
-    if (fullLocation) {
+   if (fullLocation) {
   locationLabel.textContent = "Location: " + fullLocation;
+  item.appendChild(locationLabel);
+} else if (locationMatch) {
+  locationLabel.textContent =
+    "Unknown location abbreviation: " + locationMatch[1];
   item.appendChild(locationLabel);
 }
     updateCanceledLabel();
