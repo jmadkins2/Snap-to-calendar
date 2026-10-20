@@ -838,10 +838,15 @@ document.getElementById("confirmDayTimes").checked = false;
   if (!locationLabel.isConnected) {
     item.appendChild(locationLabel);
   }
+} else if (correctedLocationMatch) {
+  locationLabel.textContent =
+    "Unknown location abbreviation: " + correctedLocationMatch[1];
+  if (!locationLabel.isConnected) {
+    item.appendChild(locationLabel);
+  }
 } else {
   locationLabel.remove();
-}
-      updateCanceledLabel();
+}      updateCanceledLabel();
 
       const updatedTime = activityText.textContent.match(/^(\d{1,2}):(\d{2})\b/);
 
