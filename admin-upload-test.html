@@ -227,8 +227,6 @@ locationDictionary = {};
 data.forEach(function(location) {
   locationDictionary[location.abbreviation] = location.full_name;
 });
-
-  console.log("Tower lookup:", locationDictionary["T"]);
   
   data.forEach(function(location) {
     const item = document.createElement("li");
