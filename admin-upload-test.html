@@ -7,7 +7,7 @@
   <title>Upload Calendar | PickMyActivities</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: Arial, sans-serif;ye
       font-size: 18px;
       line-height: 1.5;
       max-width: 650px;
@@ -835,6 +835,8 @@ if (updatedTime) {
   amPmSelect.value = (hour === 12 || hour <= 6) ? "PM" : "AM";
 }
 
+updateDisplayedTime();
+      
       document.getElementById("confirmDayTimes").checked = false;
 
       approvedDays.delete(correctionDate);
