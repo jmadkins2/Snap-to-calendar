@@ -863,6 +863,10 @@ updateDisplayedTime();
     const fullLocation = locationMatch
   ? locationDictionary[locationMatch[1].toUpperCase()]
   : null;
+    if (fullLocation) {
+  locationLabel.textContent = "Location: " + fullLocation;
+  item.appendChild(locationLabel);
+}
     updateCanceledLabel();
     item.appendChild(editButton);
 
