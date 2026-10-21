@@ -265,28 +265,7 @@ const { error } = await supabase
   .select("location_id")
   .single();
 
-if (error) {
-  console.error("Could not update location:", error);
-  alert("Location could not be saved. Please try again.");
-  return;
-}
-
-alert("Location updated successfully.");
-await loadLocations();
-  
-});
-
-item.appendChild(editButton);
-    
-    locationList.appendChild(item);
-  });
-}
-
-document.getElementById("addLocationForm")
-  .addEventListener("submit", async function(event) {
-    event.preventDefault();
-
-    const abbreviation = document
+loadLocations();    const abbreviation = document
       .getElementById("locationAbbreviation")
       .value.trim().toUpperCase();
 
@@ -1031,9 +1010,11 @@ document.getElementById("testSaveButton").addEventListener("click", async functi
     }
 });
          
-      loadSavedCalendar();
-      window.testCalendarDay = getCalendarDay;
+   loadLocations().then(function() {
+  loadSavedCalendar();
+});
 
+window.testCalendarDay = getCalendarDay;
       
     document.getElementById("testExtractionButton")
   .addEventListener("click", async function() {
