@@ -388,6 +388,9 @@ document.getElementById("approveDayButton")
     const reviewedActivities = [];
     const activityItems = document.querySelectorAll("#reviewActivities li");
     console.log("Activities found for review:", activityItems.length);
+    activityItems.forEach(function(item, index) {
+  console.log("Activity position:", index + 1);
+});
 
 const { data: userData, error: userError } =
   await supabase.auth.getUser();
