@@ -265,7 +265,42 @@ const { error } = await supabase
   .select("location_id")
   .single();
 
-loadLocations();    const abbreviation = document
+if (error) {
+  alert("Error updating location: " + error.message);
+  return;
+}
+
+alert("Location updated successfully.");
+
+loadLocations();
+});  
+
+// Add the Edit button to the location.
+item.appendChild(editButton);
+
+// Display the location in the list.
+locationList.appendChild(item);
+
+// END: Process each location
+});
+
+// ========================================
+// END: LOAD LOCATIONS
+// ========================================
+}
+    
+  // ========================================
+// START: ADD LOCATION
+// Purpose: Save a new location to Supabase
+// ========================================
+
+document.getElementById("addLocationForm")
+  .addEventListener("submit", async function(event) {
+
+    // Prevent the page from reloading.
+    event.preventDefault();
+  
+    const abbreviation = document
       .getElementById("locationAbbreviation")
       .value.trim().toUpperCase();
 
@@ -308,7 +343,11 @@ loadLocations();    const abbreviation = document
 
     await loadLocations();
   });
-      
+
+// ========================================
+// END: ADD LOCATION
+// ========================================
+    
   const allowedExtensions = [
     "pdf", "jpg", "jpeg", "png", "heic", "heif"
   ];
