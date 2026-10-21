@@ -1009,10 +1009,7 @@ document.getElementById("testSaveButton").addEventListener("click", async functi
         button.disabled = false;
     }
 });
-         
-   loadLocations().then(function() {
-  loadSavedCalendar();
-});
+         loadSavedCalendar();
 
 window.testCalendarDay = getCalendarDay;
       
