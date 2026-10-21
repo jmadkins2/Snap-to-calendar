@@ -394,14 +394,7 @@ if (userError || !userData.user) {
     "Please sign in as an administrator.";
   return;
 }
-const { error: approvalError } = await supabase
-  .from("calendar_day_approvals")
-  .insert({
-    import_id: currentImportId,
-    community_id: 1,
-    calendar_date: approvalDate,
-    approved_by: userData.user.id
-  });
+
   
   if (approvalError) {
   console.error("Approval could not be saved:", approvalError);
