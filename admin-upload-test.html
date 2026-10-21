@@ -385,6 +385,7 @@ document.getElementById("approveDayButton")
       year + "-" +
       String(month).padStart(2, "0") + "-" +
       String(currentReviewDay).padStart(2, "0");
+    const reviewedActivities = [];
 
 const { data: userData, error: userError } =
   await supabase.auth.getUser();
