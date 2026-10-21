@@ -473,6 +473,8 @@ let currentReviewDay = 1;
     }
 
     currentReviewDay = nextDay;
+alert("Save & Approve is temporarily unavailable while we finish the new saving process.");
+return;
 const [year, month] = savedCalendarMonth.split("-").map(Number);
 const reviewDate = new Date(year, month - 1, currentReviewDay);
 
