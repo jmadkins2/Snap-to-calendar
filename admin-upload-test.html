@@ -392,6 +392,7 @@ activityItems.forEach(function(item, index) {
   console.log("Activity position:", index + 1);
 
   const activityText = item.querySelector("span").textContent;
+  console.log("Reviewed activity:", activityText);
 });
 const { data: userData, error: userError } =
   await supabase.auth.getUser();
