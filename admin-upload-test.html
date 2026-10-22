@@ -940,6 +940,20 @@ item.appendChild(timeLabel);
 
     const amPmSelect = document.createElement("select");
 
+// ========================================
+// START: ACTIVITY TIME IDENTIFIER
+// PURPOSE:
+// Identify the AM/PM selector so
+// Save & Approve can retrieve the
+// administrator's confirmed time.
+// ========================================
+
+amPmSelect.className = "review-activity-ampm";
+
+// ========================================
+// END: ACTIVITY TIME IDENTIFIER
+// ========================================
+
 const amOption = document.createElement("option");
 amOption.value = "AM";
 amOption.textContent = "AM";
