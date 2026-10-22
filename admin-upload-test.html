@@ -199,6 +199,20 @@
       
 let locationDictionary = {};
 
+// ========================================
+// START STEP 1529
+// PURPOSE:
+// Store Supabase location IDs by abbreviation.
+// Example: CDR maps to location_id 1.
+// ========================================
+
+let locationIdDictionary = {};
+
+// ========================================
+// END STEP 1529
+// ========================================
+
+async function loadLocations() {
       
 async function loadLocations() {
   const locationList = document.getElementById("locationList");
