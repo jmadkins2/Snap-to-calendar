@@ -713,6 +713,20 @@ console.log(
   data.extracted_text.length,
   "characters"
 );
+
+// ========================================
+// START STEP 1522
+// PURPOSE:
+// Load location names before displaying
+// the first day's calendar activities.
+// ========================================
+
+await loadLocations();
+
+// ========================================
+// END STEP 1522
+// ========================================
+    
 await displayReviewActivities(firstDayActivities);
   }
 }
