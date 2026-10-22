@@ -236,11 +236,27 @@ async function loadLocations() {
     return;
   }
 
+// ========================================
+// START STEP 1530
+// PURPOSE:
+// Build dictionaries for location names
+// and their corresponding Supabase IDs.
+// ========================================
+
 locationDictionary = {};
+locationIdDictionary = {};
 
 data.forEach(function(location) {
-  locationDictionary[location.abbreviation] = location.full_name;
+  const abbreviation = location.abbreviation.toUpperCase();
+
+  locationDictionary[abbreviation] = location.full_name;
+  locationIdDictionary[abbreviation] = location.location_id;
 });
+
+// ========================================
+// END STEP 1530
+// ========================================
+
   
   data.forEach(function(location) {
     const item = document.createElement("li");
