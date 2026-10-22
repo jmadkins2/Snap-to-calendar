@@ -947,9 +947,28 @@ if (timeMatch) {
 amPmSelect.setAttribute("aria-label", "Starting time AM or PM");
 amPmSelect.style.marginLeft = "10px";
 
+// ========================================
+// START: AM/PM CHANGE SAFEGUARD
+// PURPOSE:
+// When an administrator changes an
+// activity's AM/PM selection, require
+// confirmation of the day's times again.
+// ========================================
+
 amPmSelect.addEventListener("change", function () {
+
+  // Clear the administrator's confirmation.
   document.getElementById("confirmDayTimes").checked = false;
+
+  // Disable Save & Approve until the
+  // administrator confirms the times again.
+  document.getElementById("approveDayButton").disabled = true;
+
 });
+
+// ========================================
+// END: AM/PM CHANGE SAFEGUARD
+// ========================================});
     
 item.appendChild(amPmSelect);
 
