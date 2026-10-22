@@ -762,6 +762,19 @@ document.getElementById("confirmDayTimes").checked = false;
     const item = document.createElement("li");
     const activityText = document.createElement("span");
 
+    // ========================================
+// START STEP 1493
+// PURPOSE:
+// Identify each activity description
+// so Save & Approve can retrieve it.
+// ========================================
+
+activityText.className = "review-activity-text";
+
+// ========================================
+// END STEP 1493
+// ========================================
+
     const savedCorrection = (savedCorrections || []).find(
       correction => correction.activity_position === index + 1
     );
