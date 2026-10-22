@@ -881,10 +881,26 @@ if (updatedTime) {
 }
 
 updateDisplayedTime();
-      
-      document.getElementById("confirmDayTimes").checked = false;
+      // ========================================
+// START: ACTIVITY CORRECTION SAFEGUARD
+// PURPOSE:
+// Require the administrator to confirm
+// the day's times again after correcting
+// an activity description.
+// ========================================
 
-      approvedDays.delete(correctionDate);
+// Clear the previous time confirmation.
+document.getElementById("confirmDayTimes").checked = false;
+
+// Disable approval until times are confirmed again.
+document.getElementById("approveDayButton").disabled = true;
+
+// Mark this day as needing approval.
+approvedDays.delete(correctionDate);
+
+// ========================================
+// END: ACTIVITY CORRECTION SAFEGUARD
+// ========================================
       updateApprovalProgress();
 
       document.getElementById("dayApprovalStatus").textContent =
