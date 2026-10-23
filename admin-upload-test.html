@@ -490,12 +490,44 @@ const activityName = reviewedText
   .replace(/\s*-?\s*\([A-Za-z]+\)\s*$/, "")
   .trim();
 
+// ========================================
+// START STEP 1559
+// PURPOSE:
+// Convert reviewed activity times into
+// 24-hour format for database saving.
+// ========================================
+
+const timeMatch = reviewedText.match(/^(\d{1,2}):(\d{2})\b/);
+
+const amPmSelector = item.querySelector(".review-activity-ampm");
+const amPm = amPmSelector ? amPmSelector.value : "";
+
+let startTime = null;
+
+if (timeMatch && (amPm === "AM" || amPm === "PM")) {
+  let hour = Number(timeMatch[1]);
+  const minute = Number(timeMatch[2]);
+
+  if (hour >= 1 && hour <= 12 && minute >= 0 && minute <= 59) {
+    if (amPm === "PM" && hour !== 12) hour += 12;
+    if (amPm === "AM" && hour === 12) hour = 0;
+
+    startTime =
+      String(hour).padStart(2, "0") + ":" +
+      String(minute).padStart(2, "0");
+  }
+}
+
 reviewedActivities.push({
   activity_position: index + 1,
   activity_name: activityName,
+  start_time: startTime,
   reviewed_text: reviewedText
 });
 
+// ========================================
+// END STEP 1559
+// ========================================
 // ========================================
 // END STEP 1556
 // ========================================
