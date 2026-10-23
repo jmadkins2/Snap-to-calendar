@@ -525,14 +525,26 @@ if (timeMatch && (amPm === "AM" || amPm === "PM")) {
 // Do not invent an ending time.
 // ========================================
 
+// ========================================
+// START STEP 1563
+// PURPOSE:
+// Add an optional end time and activity
+// status to the prepared database record.
+// ========================================
+
 reviewedActivities.push({
   activity_position: index + 1,
   activity_name: activityName,
   start_time: startTime,
   end_time: null,
-  reviewed_text: reviewedText
+  location: activityLocation,
+  reviewed_text: reviewedText,
+  status: "scheduled"
 });
 
+// ========================================
+// END STEP 1563
+// ========================================
 // ========================================
 // END STEP 1561
 // ========================================
