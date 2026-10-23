@@ -532,6 +532,20 @@ if (timeMatch && (amPm === "AM" || amPm === "PM")) {
 // status to the prepared database record.
 // ========================================
 
+// ========================================
+// START STEP 1573
+// PURPOSE:
+// Read the administrator's selected
+// activity status for database saving.
+// ========================================
+
+const statusSelector =
+  item.querySelector(".review-activity-status");
+
+const activityStatus = statusSelector
+  ? statusSelector.value
+  : null;
+
 reviewedActivities.push({
   activity_position: index + 1,
   activity_name: activityName,
@@ -539,9 +553,12 @@ reviewedActivities.push({
   end_time: null,
   location: activityLocation,
   reviewed_text: reviewedText,
-  status: "scheduled"
+  status: activityStatus
 });
 
+// ========================================
+// END STEP 1573
+// ========================================
 // ========================================
 // END STEP 1563
 // ========================================
