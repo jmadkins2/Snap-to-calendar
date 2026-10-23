@@ -639,7 +639,7 @@ if (userError || !userData.user) {
 // before allowing day approval.
 // ========================================
 
-const { data: administrator, error: adminError } =
+const { data: dayAdministrator, error: dayAdminError } =
   await supabase
     .from("admin_users")
     .select("admin_role")
@@ -647,7 +647,7 @@ const { data: administrator, error: adminError } =
     .eq("user_id", userData.user.id)
     .maybeSingle();
 
-if (adminError || !administrator) {
+if (dayAdminError || !dayAdministrator) {
   document.getElementById("dayApprovalStatus").textContent =
     "Access denied. Administrator authorization is required.";
   return;
