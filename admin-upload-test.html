@@ -632,6 +632,31 @@ if (userError || !userData.user) {
       return;
     }
 
+// ========================================
+// START STEP 1590
+// PURPOSE:
+// Verify administrator authorization
+// before allowing day approval.
+// ========================================
+
+const { data: administrator, error: adminError } =
+  await supabase
+    .from("admin_users")
+    .select("admin_role")
+    .eq("community_id", 1)
+    .eq("user_id", userData.user.id)
+    .maybeSingle();
+
+if (adminError || !administrator) {
+  document.getElementById("dayApprovalStatus").textContent =
+    "Access denied. Administrator authorization is required.";
+  return;
+}
+
+// ========================================
+// END STEP 1590
+// ========================================
+    
     const { data: administrator, error: adminError } =
       await supabase
         .from("admin_users")
