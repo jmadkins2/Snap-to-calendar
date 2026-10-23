@@ -454,13 +454,49 @@ document.getElementById("approveDayButton")
     const reviewedActivities = [];
     const activityItems = document.querySelectorAll("#reviewActivities li");
     console.log("Activities found for review:", activityItems.length);
-activityItems.forEach(function(item, index) {
-  console.log("Activity position:", index + 1);
 
-  const activityText = item.querySelector("span").textContent;
-  console.log("Reviewed activity:", activityText);
+    // ========================================
+// START STEP 1553
+// PURPOSE:
+// Collect reviewed activity descriptions
+// and their correct calendar positions.
+// Saving remains disabled.
+// ========================================
+
+activityItems.forEach(function(item, index) {
+
+  const descriptionElement =
+    item.querySelector(".review-activity-text");
+
+  if (!descriptionElement) {
+    console.error(
+      "Missing description for activity:",
+      index + 1
+    );
+    return;
+  }
+
+  const reviewedText = descriptionElement.textContent.trim();
+
+  reviewedActivities.push({
+    activity_position: index + 1,
+    reviewed_text: reviewedText
+  });
+
 });
-const { data: userData, error: userError } =
+
+console.log(
+  "STEP 1553 — Prepared activities:",
+  reviewedActivities
+);
+
+// ========================================
+// END STEP 1553
+// ========================================
+    
+    
+    
+    const { data: userData, error: userError } =
   await supabase.auth.getUser();
 
 if (userError || !userData.user) {
