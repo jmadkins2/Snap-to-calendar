@@ -565,7 +565,6 @@ reviewedActivities.push({
 // ========================================
 // END STEP 1561
 // ========================================
-
 // ========================================
 // END STEP 1559
 // ========================================
@@ -583,7 +582,37 @@ console.log(
 // END STEP 1553
 // ========================================
     
-    
+// ========================================
+// START STEP 1584
+// PURPOSE:
+// Prevent approval when activity records
+// contain missing or invalid information.
+// ========================================
+
+const invalidActivities = reviewedActivities.filter(function(activity) {
+  return (
+    !activity.activity_name ||
+    !activity.start_time ||
+    !/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(activity.start_time) ||
+    !["scheduled", "canceled"].includes(activity.status)
+  );
+});
+
+if (invalidActivities.length > 0) {
+  document.getElementById("dayApprovalStatus").textContent =
+    "Cannot approve this day. Please correct the missing or invalid activity information.";
+
+  console.error(
+    "STEP 1584 — Invalid activities:",
+    invalidActivities
+  );
+
+  return;
+}
+
+// ========================================
+// END STEP 1584
+// ========================================
     
     const { data: userData, error: userError } =
   await supabase.auth.getUser();
