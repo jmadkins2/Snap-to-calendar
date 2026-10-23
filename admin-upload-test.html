@@ -1166,6 +1166,51 @@ amPmSelect.addEventListener("change", function () {
 
 item.appendChild(amPmSelect);
 
+// ========================================
+// START STEP 1571
+// PURPOSE:
+// Give every activity a Scheduled/Canceled
+// selector for administrator review.
+// Changing status requires reconfirmation.
+// ========================================
+
+const statusLabel = document.createElement("label");
+statusLabel.textContent = "Activity status: ";
+statusLabel.style.display = "block";
+statusLabel.style.marginTop = "10px";
+statusLabel.style.fontWeight = "bold";
+
+const statusSelect = document.createElement("select");
+statusSelect.className = "review-activity-status";
+statusSelect.setAttribute("aria-label", "Activity status");
+
+const scheduledOption = document.createElement("option");
+scheduledOption.value = "scheduled";
+scheduledOption.textContent = "Scheduled";
+
+const canceledOption = document.createElement("option");
+canceledOption.value = "canceled";
+canceledOption.textContent = "Canceled";
+
+statusSelect.appendChild(scheduledOption);
+statusSelect.appendChild(canceledOption);
+
+// Default to Scheduled.
+statusSelect.value = "scheduled";
+
+statusLabel.appendChild(statusSelect);
+item.appendChild(statusLabel);
+
+// Require confirmation again if status changes.
+statusSelect.addEventListener("change", function () {
+  document.getElementById("confirmDayTimes").checked = false;
+  document.getElementById("approveDayButton").disabled = true;
+});
+
+// ========================================
+// END STEP 1571
+// ========================================
+    
     function updateDisplayedTime() {
   const currentTime = activityText.textContent.match(/^(\d{1,2}):(\d{2})\b/);
 
