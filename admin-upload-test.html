@@ -518,12 +518,24 @@ if (timeMatch && (amPm === "AM" || amPm === "PM")) {
   }
 }
 
+// ========================================
+// START STEP 1561
+// PURPOSE:
+// Include the optional end-time field.
+// Do not invent an ending time.
+// ========================================
+
 reviewedActivities.push({
   activity_position: index + 1,
   activity_name: activityName,
   start_time: startTime,
+  end_time: null,
   reviewed_text: reviewedText
 });
+
+// ========================================
+// END STEP 1561
+// ========================================
 
 // ========================================
 // END STEP 1559
