@@ -1212,9 +1212,27 @@ canceledOption.textContent = "Canceled";
 statusSelect.appendChild(scheduledOption);
 statusSelect.appendChild(canceledOption);
 
-// Default to Scheduled.
-statusSelect.value = "scheduled";
+// ========================================
+// START STEP 1577
+// PURPOSE:
+// Suggest Canceled when the original
+// activity text indicates cancellation.
+// The administrator can override it.
+// ========================================
 
+const cancellationDetected =
+  /\b(cancelled|canceled|cancel|cxl)\b/i.test(
+    activityText.textContent
+  );
+
+statusSelect.value = cancellationDetected
+  ? "canceled"
+  : "scheduled";
+
+// ========================================
+// END STEP 1577
+// ========================================
+    
 statusLabel.appendChild(statusSelect);
 item.appendChild(statusLabel);
 
