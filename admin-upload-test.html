@@ -1392,17 +1392,25 @@ updateDisplayedTime();
   function getCalendarDay(dayNumber) {
   if (!savedCalendarText) {
     return "";
-  }
-
-    const [year, month] = savedCalendarMonth.split("-").map(Number);
+  } const [year, month] = savedCalendarMonth.split("-").map(Number);
 const monthName = new Date(year, month - 1, 1)
   .toLocaleDateString("en-US", { month: "long" });
 
+// ========================================
+// START STEP 1784
+// PURPOSE: Recognize calendar headings
+// such as "October 1:".
+// ========================================
+
 const dayPattern = new RegExp(
-  "^" + monthName + "\\s+(\\d{1,2}),\\s+" + year + "\\b.*$",
+  "^" + monthName + "\\s+(\\d{1,2}):\\s*$",
   "gm"
 );
 
+// ========================================
+// END STEP 1784
+// ========================================
+    
   const matches = [...savedCalendarText.matchAll(dayPattern)];
 
   const currentIndex = matches.findIndex(
