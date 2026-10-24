@@ -1416,7 +1416,11 @@ return savedCalendarText
   .trim();
       }
       
+// START STEP 1692
+// PURPOSE: Disable the old test-saving button.
 document.getElementById("testSaveButton").addEventListener("click", async function () {
+    alert("The old test-saving button is disabled.");
+    return;
     const button = this;
     button.disabled = true;
 
