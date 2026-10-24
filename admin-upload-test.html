@@ -622,13 +622,11 @@ if (userError || !userData.user) {
     "Please sign in as an administrator.";
   return;
 }
-});
-    
-    if (userError || !userData.user) {
-      message.textContent =
-        "Please sign in as an administrator first.";
-      return;
-    }
+if (userError || !userData.user) {
+  document.getElementById("dayApprovalStatus").textContent =
+    "Please sign in as an administrator.";
+  return;
+}
 
 // ========================================
 // START STEP 1590
@@ -654,7 +652,15 @@ if (dayAdminError || !dayAdministrator) {
 // ========================================
 // END STEP 1590
 // ========================================
+
+});
     
+    if (userError || !userData.user) {
+      message.textContent =
+        "Please sign in as an administrator first.";
+      return;
+    }
+
     const { data: administrator, error: adminError } =
       await supabase
         .from("admin_users")
