@@ -653,6 +653,45 @@ if (dayAdminError || !dayAdministrator) {
 // END STEP 1590
 // ========================================
 
+    // ========================================
+// START STEP 1629
+// PURPOSE:
+// Send the reviewed day's activities to
+// Supabase using the current import and date.
+// This code remains disabled by the safety
+// return at the start of the click handler.
+// ========================================
+
+try {
+  const { error: saveError } = await supabase.rpc(
+    "save_and_approve_day",
+    {
+      p_import_id: currentImportId,
+      p_calendar_date: approvalDate,
+      p_activities: reviewedActivities
+    }
+  );
+
+  if (saveError) {
+    document.getElementById("dayApprovalStatus").textContent =
+      "Save failed: " + saveError.message;
+    console.error("STEP 1629 — Save failed:", saveError);
+    return;
+  }
+
+  document.getElementById("dayApprovalStatus").textContent =
+    "Day saved and approved successfully.";
+
+} catch (saveException) {
+  document.getElementById("dayApprovalStatus").textContent =
+    "An unexpected error occurred while saving.";
+  console.error("STEP 1629 — Unexpected error:", saveException);
+}
+
+// ========================================
+// END STEP 1629
+// ========================================
+    
 });
     
     if (userError || !userData.user) {
