@@ -563,6 +563,24 @@ const activityStatus = statusSelector
   ? statusSelector.value
   : null;
 
+// ========================================
+// START STEP 1833
+// PURPOSE:
+// Obtain the full location name from
+// each reviewed activity for saving.
+// ========================================
+
+const reviewedLocationMatch =
+  reviewedText.match(/\(([A-Za-z]+)\)\s*$/);
+
+const activityLocation = reviewedLocationMatch
+  ? locationDictionary[reviewedLocationMatch[1].toUpperCase()] || null
+  : null;
+
+// ========================================
+// END STEP 1833
+// ========================================
+  
 reviewedActivities.push({
   activity_position: index + 1,
   activity_name: activityName,
