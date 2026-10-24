@@ -639,11 +639,7 @@ if (userError || !userData.user) {
     "Please sign in as an administrator.";
   return;
 }
-if (userError || !userData.user) {
-  document.getElementById("dayApprovalStatus").textContent =
-    "Please sign in as an administrator.";
-  return;
-}
+
 
 // ========================================
 // START STEP 1590
@@ -669,8 +665,7 @@ if (dayAdminError || !dayAdministrator) {
 // ========================================
 // END STEP 1590
 // ========================================
-
-    // ========================================
+// ========================================
 // START STEP 1629
 // PURPOSE:
 // Send the reviewed day's activities to
@@ -698,6 +693,19 @@ try {
 
   document.getElementById("dayApprovalStatus").textContent =
     "Day saved and approved successfully.";
+
+  // ========================================
+// START STEP 1768
+// PURPOSE: Refresh the approval count
+// after a successful save.
+// ========================================
+
+await loadApprovedDays();
+updateApprovalProgress();
+
+// ========================================
+// END STEP 1768
+// ========================================
 
 } catch (saveException) {
   document.getElementById("dayApprovalStatus").textContent =
