@@ -441,9 +441,11 @@ document.getElementById("confirmDayTimes")
    
 document.getElementById("approveDayButton")
   .addEventListener("click", async function() {
-
-    alert("Save & Approve is temporarily unavailable while we finish the new saving process.");
-    return;
+// START STEP 1932
+// PURPOSE: Prepare Save & Approve for controlled testing.
+// alert("Save & Approve is temporarily unavailable while we finish the new saving process.");
+// return;
+// END STEP 1932
 
 // ========================================
 // START STEP 1637
@@ -649,7 +651,7 @@ if (invalidActivities.length > 0) {
 // END STEP 1584
 // ========================================
     
-    const { data: userData, error: userError } =
+ const { data: userData, error: userError } =
   await supabase.auth.getUser();
 
 if (userError || !userData.user) {
