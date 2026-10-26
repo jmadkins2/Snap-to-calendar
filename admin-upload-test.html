@@ -575,9 +575,44 @@ const activityStatus = statusSelector
 const reviewedLocationMatch =
   reviewedText.match(/\(([A-Za-z]+)\)\s*$/);
 
-const activityLocation = reviewedLocationMatch
-  ? locationDictionary[reviewedLocationMatch[1].toUpperCase()] || null
+// ========================================
+// START STEP 2065
+// PURPOSE:
+// Save the administrator's selected
+// location, including custom locations.
+// ========================================
+
+const locationSelector =
+  item.querySelector(".review-activity-location");
+
+const customLocationInput =
+  item.querySelector(".review-activity-other-location");
+
+let activityLocation = locationSelector
+  ? locationSelector.value
   : null;
+
+if (activityLocation === "__OTHER__") {
+  activityLocation = customLocationInput
+    ? customLocationInput.value.trim()
+    : "";
+}
+
+// ========================================
+// START STEP 2066
+// PURPOSE:
+// Prevent saving an empty custom location.
+// ========================================
+
+// ========================================
+// END STEP 2066
+// ========================================
+  
+activityLocation = activityLocation || null;
+
+// ========================================
+// END STEP 2065
+// ========================================
 
 // ========================================
 // END STEP 1833
@@ -626,6 +661,34 @@ console.log(
 // contain missing or invalid information.
 // ========================================
 
+// ========================================
+// START STEP 2069
+// PURPOSE:
+// Prevent approval when Other is selected
+// but no custom location was entered.
+// ========================================
+
+const emptyCustomLocation = Array.from(
+  document.querySelectorAll("#reviewActivities li")
+).some(function(item) {
+  const selector = item.querySelector(".review-activity-location");
+  const input = item.querySelector(".review-activity-other-location");
+
+  return selector &&
+    selector.value === "__OTHER__" &&
+    (!input || !input.value.trim());
+});
+
+if (emptyCustomLocation) {
+  document.getElementById("dayApprovalStatus").textContent =
+    "Please enter a custom location or select No location.";
+  return;
+}
+
+// ========================================
+// END STEP 2069
+// ========================================
+    
 const invalidActivities = reviewedActivities.filter(function(activity) {
   return (
     !activity.activity_name ||
@@ -1189,6 +1252,23 @@ activityText.className = "review-activity-text";
       const correctedFullLocation = correctedLocationMatch
   ? locationDictionary[correctedLocationMatch[1].toUpperCase()]
   : null;
+
+// ========================================
+// START STEP 2071
+// PURPOSE:
+// Update the location dropdown after an
+// activity description is corrected,
+// without overwriting a manual selection.
+// ========================================
+
+if (!locationSelect.dataset.manuallyChanged) {
+  locationSelect.value = correctedFullLocation || "";
+}
+
+// ========================================
+// END STEP 2071
+// ========================================
+      
       if (correctedFullLocation) {
   locationLabel.textContent = "Location: " + correctedFullLocation;
   if (!locationLabel.isConnected) {
@@ -1258,12 +1338,137 @@ approvedDays.delete(correctionDate);
       alert("Correction saved successfully.");
     });
 
-    item.appendChild(activityText);
+    item.appendChild(activityText);// ========================================
+// START STEP 2060
+// PURPOSE:
+// Create a location dropdown with saved
+// locations and an Other option.
+// ========================================
+
+const locationSelect = document.createElement("select");
+locationSelect.className = "review-activity-location";
+
+const blankOption = document.createElement("option");
+blankOption.value = "";
+blankOption.textContent = "No location selected";
+locationSelect.appendChild(blankOption);
+
+const uniqueLocations = [...new Set(
+  Object.values(locationDictionary)
+)];
+
+uniqueLocations.sort((a, b) => a.localeCompare(b));
+
+uniqueLocations.forEach(function(fullName) {
+  const option = document.createElement("option");
+  option.value = fullName;
+  option.textContent = fullName;
+  locationSelect.appendChild(option);
+});
+
+const otherOption = document.createElement("option");
+otherOption.value = "__OTHER__";
+otherOption.textContent = "Other — Enter Location";
+locationSelect.appendChild(otherOption);
+// ========================================
+// START STEP 2061
+// PURPOSE:
+// Allow a custom location for one activity
+// when the administrator selects Other.
+// ========================================
+
+const otherLocationInput = document.createElement("input");
+otherLocationInput.type = "text";
+otherLocationInput.className = "review-activity-other-location";
+otherLocationInput.placeholder = "Enter location";
+otherLocationInput.setAttribute("aria-label", "Other activity location");
+otherLocationInput.hidden = true;
+
+// ========================================
+// START STEP 2064
+// PURPOSE:
+// Require reconfirmation when a custom
+// activity location is changed.
+// ========================================
+
+otherLocationInput.addEventListener("input", function () {
+  document.getElementById("confirmDayTimes").checked = false;
+  document.getElementById("approveDayButton").disabled = true;
+});
+
+// ========================================
+// END STEP 2064
+// ========================================
+
+locationSelect.addEventListener("change", function () {
+  otherLocationInput.hidden = locationSelect.value !== "__OTHER__";
+
+  // ========================================
+// START STEP 2072
+// PURPOSE:
+// Remember when the administrator manually
+// changes an activity's location.
+// ========================================
+
+locationSelect.dataset.manuallyChanged = "true";
+
+// ========================================
+// END STEP 2072
+// ========================================
+
+  document.getElementById("confirmDayTimes").checked = false;
+  document.getElementById("approveDayButton").disabled = true;
+});
+
+// ========================================
+// END STEP 2061
+// ========================================
+// ========================================
+// END STEP 2060
+// ========================================
+
+// ========================================
+// START STEP 2062
+// PURPOSE:
+// Display the location dropdown and
+// optional custom location field.
+// ========================================
+
+const locationControls = document.createElement("div");
+locationControls.style.marginTop = "8px";
+
+const locationTitle = document.createElement("label");
+locationTitle.textContent = "Activity location: ";
+locationTitle.appendChild(locationSelect);
+
+locationControls.appendChild(locationTitle);
+locationControls.appendChild(otherLocationInput);
+
+item.appendChild(locationControls);
+
+// ========================================
+// END STEP 2062
+// ========================================
+    
     const locationLabel = document.createElement("div");
     const locationMatch = activityText.textContent.match(/\(([A-Za-z]+)\)\s*$/);
     const fullLocation = locationMatch
   ? locationDictionary[locationMatch[1].toUpperCase()]
   : null;
+
+// ========================================
+// START STEP 2063
+// PURPOSE:
+// Automatically select the recognized
+// activity location in the dropdown.
+// ========================================
+
+locationSelect.value = fullLocation || "";
+
+// ========================================
+// END STEP 2063
+// ========================================
+    
    if (fullLocation) {
   locationLabel.textContent = "Location: " + fullLocation;
   item.appendChild(locationLabel);
