@@ -1268,21 +1268,31 @@ if (!locationSelect.dataset.manuallyChanged) {
 // ========================================
 // END STEP 2071
 // ========================================
-      
-      if (correctedFullLocation) {
-  locationLabel.textContent = "Location: " + correctedFullLocation;
-  if (!locationLabel.isConnected) {
-    item.appendChild(locationLabel);
-  }
-} else if (correctedLocationMatch) {
+   // ========================================
+// START STEP 2090
+// PURPOSE:
+// Avoid duplicate location text after
+// editing an activity description.
+// Preserve unknown-location warnings.
+// ========================================
+
+if (correctedLocationMatch && !correctedFullLocation) {
   locationLabel.textContent =
     "Unknown location abbreviation: " + correctedLocationMatch[1];
+
   if (!locationLabel.isConnected) {
     item.appendChild(locationLabel);
   }
 } else {
   locationLabel.remove();
-}      updateCanceledLabel();
+}
+
+// ========================================
+// END STEP 2090
+// ========================================
+      
+      
+      updateCanceledLabel();
 
       const updatedTime = activityText.textContent.match(/^(\d{1,2}):(\d{2})\b/);
 
@@ -1469,14 +1479,22 @@ locationSelect.value = fullLocation || "";
 // END STEP 2063
 // ========================================
     
-   if (fullLocation) {
-  locationLabel.textContent = "Location: " + fullLocation;
-  item.appendChild(locationLabel);
-} else if (locationMatch) {
+ // ========================================
+// START STEP 2088
+// PURPOSE:
+// Avoid displaying a duplicate location.
+// Keep warnings for unknown abbreviations.
+// ========================================
+
+if (locationMatch && !fullLocation) {
   locationLabel.textContent =
     "Unknown location abbreviation: " + locationMatch[1];
   item.appendChild(locationLabel);
 }
+
+// ========================================
+// END STEP 2088
+// ========================================
     updateCanceledLabel();
     item.appendChild(editButton);
 
