@@ -714,6 +714,20 @@ try {
   document.getElementById("dayApprovalStatus").textContent =
     "Day saved and approved successfully.";
 
+// ========================================
+// START STEP 2029
+// PURPOSE:
+// Clear the time confirmation checkbox
+// after a successful Save & Approve.
+// This helps prevent accidental resubmission.
+// ========================================
+
+document.getElementById("confirmDayTimes").checked = false;
+
+// ========================================
+// END STEP 2029
+// ========================================
+  
   // ========================================
 // START STEP 1768
 // PURPOSE: Refresh the approval count
