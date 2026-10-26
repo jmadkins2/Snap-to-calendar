@@ -1214,7 +1214,19 @@ amPmSelect.disabled = !updatedTime;
 
 if (updatedTime) {
   const hour = Number(updatedTime[1]);
-  amPmSelect.value = (hour === 12 || hour <= 6) ? "PM" : "AM";
+// ========================================
+// START STEP 2044
+// PURPOSE:
+// Suggest PM for 12 and 1–7.
+// Suggest AM for 8–11.
+// The administrator can override this.
+// ========================================
+
+amPmSelect.value = (hour === 12 || hour <= 7) ? "PM" : "AM";
+
+// ========================================
+// END STEP 2044
+// ========================================
 }
 
 updateDisplayedTime();
@@ -1302,12 +1314,21 @@ pmOption.textContent = "PM";
 amPmSelect.appendChild(amOption);
 amPmSelect.appendChild(pmOption);
 
-// Suggest AM for 8–11, PM for 12 and 1–6.
-// The administrator can change this suggestion.
+// Suggest AM for 8–11, PM for 12 and 1–7.// The administrator can change this suggestion.
 if (timeMatch) {
   const hour = Number(timeMatch[1]);
-  amPmSelect.value = (hour === 12 || hour <= 6) ? "PM" : "AM";
-} else {
+// ========================================
+// START STEP 2045
+// PURPOSE:
+// Use the same AM/PM suggestion when
+// activities are first displayed.
+// ========================================
+
+amPmSelect.value = (hour === 12 || hour <= 7) ? "PM" : "AM";
+
+// ========================================
+// END STEP 2045
+// ========================================} else {
   amPmSelect.disabled = true;
 }
 
