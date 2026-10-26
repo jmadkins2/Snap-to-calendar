@@ -1188,10 +1188,36 @@ activityText.className = "review-activity-text";
 
     const editButton = document.createElement("button");
     editButton.type = "button";
-    editButton.textContent = "Edit";
-    editButton.dataset.activityPosition = String(index + 1);
-    editButton.style.marginLeft = "12px";
 
+// ========================================
+// START STEP 2096
+// PURPOSE:
+// Clearly identify the activity description
+// editing button.
+// ========================================
+
+editButton.textContent = "Edit Description";
+
+// ========================================
+// END STEP 2096
+// ========================================
+    
+    editButton.dataset.activityPosition = String(index + 1);
+// ========================================
+// START STEP 2097
+// PURPOSE:
+// Give the activity Edit Description button
+// consistent spacing and placement.
+// ========================================
+
+editButton.style.display = "block";
+editButton.style.marginLeft = "0";
+editButton.style.marginTop = "8px";
+editButton.style.marginBottom = "8px";
+
+// ========================================
+// END STEP 2097
+// ========================================
     editButton.addEventListener("click", async function () {
       const correction = prompt(
         "Correct the AI transcription to match the printed calendar:",
@@ -1454,8 +1480,21 @@ locationTitle.appendChild(locationSelect);
 locationControls.appendChild(locationTitle);
 locationControls.appendChild(otherLocationInput);
 
-item.appendChild(locationControls);
+// ========================================
+// START STEP 2099
+// PURPOSE:
+// Delay displaying the location controls
+// until after the time and status controls.
+// The location controls will be appended
+// later in the activity layout.
+// ========================================
 
+// Location controls are created above,
+// but will be added to the activity below.
+
+// ========================================
+// END STEP 2099
+// ========================================
 // ========================================
 // END STEP 2062
 // ========================================
@@ -1637,6 +1676,19 @@ statusSelect.value = cancellationDetected
 statusLabel.appendChild(statusSelect);
 item.appendChild(statusLabel);
 
+// ========================================
+// START STEP 2101
+// PURPOSE:
+// Display the activity location dropdown
+// directly below the activity status control.
+// ========================================
+
+item.appendChild(locationControls);
+
+// ========================================
+// END STEP 2101
+// ========================================
+    
 // Require confirmation again if status changes.
 statusSelect.addEventListener("change", function () {
   document.getElementById("confirmDayTimes").checked = false;
