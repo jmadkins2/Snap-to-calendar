@@ -305,27 +305,21 @@ loadLocations();
 
 // Add the Edit button to the location.
 // ========================================
-// START STEP 2113
-// PURPOSE:
-// Place Edit Description beside the
-// activity description, allowing long
-// descriptions to wrap when necessary.
-// ========================================
-
-editButton.style.display = "inline-block";
-editButton.style.marginTop = "0";
-editButton.style.marginBottom = "0";
-editButton.style.marginLeft = "0";
-editButton.style.flexShrink = "0";
-
-descriptionRow.appendChild(editButton);
-
-// ========================================
-// END STEP 2113
 // ========================================
 // Display the location in the list.
-locationList.appendChild(item);
+// ========================================
+// START STEP 2129
+// PURPOSE:
+// Restore the Edit button to the permanent
+// location list and prevent the
+// descriptionRow JavaScript error.
+// ========================================
 
+item.appendChild(editButton);
+
+// ========================================
+// END STEP 2129
+// ========================================
 // END: Process each location
 });
 
@@ -1416,7 +1410,9 @@ descriptionRow.style.flexWrap = "nowrap";
 
 // ========================================
 // END STEP 2122
-// ========================================descriptionRow.style.gap = "10px";
+// ========================================
+    
+    descriptionRow.style.gap = "10px";
 
 // ========================================
 // START STEP 2118
