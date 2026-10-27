@@ -782,7 +782,49 @@ if (dayAdminError || !dayAdministrator) {
 // return at the start of the click handler.
 // ========================================
 
+
+    
 try {
+// ========================================
+// START STEP 2153
+// PURPOSE:
+// Tell the administrator that the day's
+// activities are being saved.
+// ========================================
+
+document.getElementById("dayApprovalStatus").textContent =
+  "Saving activities and approving the day...";
+
+// ========================================
+// END STEP 2153
+// ========================================
+// ========================================
+// START STEP 2154
+// PURPOSE:
+// Prevent repeated Save & Approve clicks
+// while the database request is running.
+// ========================================
+
+// ========================================
+// START STEP 2164
+// PURPOSE:
+// Remember the button's current label,
+// including the date, before changing
+// it to "Saving...".
+// ========================================
+
+const saveButton = document.getElementById("approveDayButton");
+const originalSaveButtonText = saveButton.textContent;
+
+saveButton.disabled = true;
+saveButton.textContent = "Saving...";
+
+// ========================================
+// END STEP 2164
+// ========================================
+// ========================================
+// END STEP 2154
+// ========================================
   const { error: saveError } = await supabase.rpc(
     "save_and_approve_day",
     {
@@ -792,13 +834,43 @@ try {
     }
   );
 
-  if (saveError) {
-    document.getElementById("dayApprovalStatus").textContent =
-      "Save failed: " + saveError.message;
-    console.error("STEP 1629 — Save failed:", saveError);
-    return;
-  }
+if (saveError) {
+  document.getElementById("dayApprovalStatus").textContent =
+    "Save failed: " + saveError.message;
 
+  console.error("STEP 1629 — Save failed:", saveError);
+
+  // ========================================
+  // START STEP 2156
+  // PURPOSE:
+  // Restore the Save & Approve button
+  // after a failed save so the administrator
+  // can review the problem and try again.
+  // ========================================
+
+// ========================================
+// START STEP 2165
+// PURPOSE:
+// Restore the original Save & Approve
+// button label, including the date,
+// if saving fails.
+// ========================================
+
+saveButton.textContent = originalSaveButtonText;
+
+// ========================================
+// END STEP 2165
+// ========================================  
+  
+  saveButton.disabled = false;
+
+  // ========================================
+  // END STEP 2156
+  // ========================================
+
+  return;
+}
+  
   document.getElementById("dayApprovalStatus").textContent =
     "Day saved and approved successfully.";
 
@@ -813,6 +885,34 @@ try {
 document.getElementById("confirmDayTimes").checked = false;
   document.getElementById("approveDayButton").disabled = true;
 
+ // ========================================
+// START STEP 2157
+// PURPOSE:
+// Restore the button's normal label after
+// a successful save while keeping it
+// disabled to prevent repeat submissions.
+// ========================================
+
+// ========================================
+// START STEP 2166
+// PURPOSE:
+// Restore the original button label,
+// including the date, after a successful
+// save and approval.
+// ========================================
+
+saveButton.textContent = originalSaveButtonText;
+
+// ========================================
+// END STEP 2166
+// ========================================
+  
+  saveButton.disabled = true;
+
+// ========================================
+// END STEP 2157
+// ======================================== 
+
 // ========================================
 // END STEP 2029
 // ========================================
@@ -823,9 +923,30 @@ document.getElementById("confirmDayTimes").checked = false;
 // after a successful save.
 // ========================================
 
-await loadApprovedDays();
-updateApprovalProgress();
+// ========================================
+// START STEP 2170
+// PURPOSE:
+// Refresh approval progress after saving.
+// If refreshing fails, do not incorrectly
+// report that the save itself failed.
+// ========================================
 
+try {
+  await loadApprovedDays();
+  updateApprovalProgress();
+} catch (refreshError) {
+  console.error(
+    "STEP 2170 — Approval progress refresh failed:",
+    refreshError
+  );
+
+  document.getElementById("dayApprovalStatus").textContent =
+    "Save completed, but approval progress could not be refreshed. Please reload the page to verify.";
+}
+
+// ========================================
+// END STEP 2170
+// ========================================
 // ========================================
 // END STEP 1768
 // ========================================
@@ -833,9 +954,39 @@ updateApprovalProgress();
 } catch (saveException) {
   document.getElementById("dayApprovalStatus").textContent =
     "An unexpected error occurred while saving.";
-  console.error("STEP 1629 — Unexpected error:", saveException);
-}
 
+  console.error("STEP 1629 — Unexpected error:", saveException);
+
+  // ========================================
+  // START STEP 2159
+  // PURPOSE:
+  // Restore the Save & Approve button
+  // if an unexpected error occurs.
+  // Require time confirmation again
+  // before another save attempt.
+  // ========================================
+
+// ========================================
+// START STEP 2167
+// PURPOSE:
+// Restore the original button label,
+// including the date, if an unexpected
+// saving error occurs.
+// ========================================
+
+saveButton.textContent = originalSaveButtonText;
+
+// ========================================
+// END STEP 2167
+// ========================================
+  document.getElementById("confirmDayTimes").checked = false;
+  saveButton.disabled = true;
+
+  // ========================================
+  // END STEP 2159
+  // ========================================
+}
+  
 // ========================================
 // END STEP 1629
 // ========================================
