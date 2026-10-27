@@ -1406,8 +1406,20 @@ descriptionRow.style.alignItems = "flex-start";
 descriptionRow.style.flexWrap = "wrap";
 descriptionRow.style.gap = "10px";
 
-activityText.style.flex = "1 1 250px";
+// ========================================
+// START STEP 2118
+// PURPOSE:
+// Allow the description to share a row
+// with the Edit Description button.
+// ========================================
+
+activityText.style.flex = "1 1 0";
 activityText.style.minWidth = "0";
+activityText.style.overflowWrap = "anywhere";
+
+// ========================================
+// END STEP 2118
+// ========================================
 
 descriptionRow.appendChild(activityText);
 item.appendChild(descriptionRow);
