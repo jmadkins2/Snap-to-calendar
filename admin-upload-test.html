@@ -1649,6 +1649,24 @@ timeStatusRow.style.marginTop = "10px";
 
 const timeControls = document.createElement("div");
 
+// ========================================
+// START STEP 2109
+// PURPOSE:
+// Display the starting time and AM/PM
+// selector together on one line.
+// ========================================
+
+timeControls.style.display = "flex";
+timeControls.style.alignItems = "center";
+timeControls.style.gap = "8px";
+timeControls.style.flexWrap = "wrap";
+
+amPmSelect.style.marginLeft = "0";
+
+// ========================================
+// END STEP 2109
+// ========================================
+
 timeControls.appendChild(timeLabel);
 timeControls.appendChild(amPmSelect);
 
