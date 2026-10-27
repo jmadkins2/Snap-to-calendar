@@ -304,8 +304,25 @@ loadLocations();
 });  
 
 // Add the Edit button to the location.
-item.appendChild(editButton);
+// ========================================
+// START STEP 2113
+// PURPOSE:
+// Place Edit Description beside the
+// activity description, allowing long
+// descriptions to wrap when necessary.
+// ========================================
 
+editButton.style.display = "inline-block";
+editButton.style.marginTop = "0";
+editButton.style.marginBottom = "0";
+editButton.style.marginLeft = "0";
+editButton.style.flexShrink = "0";
+
+descriptionRow.appendChild(editButton);
+
+// ========================================
+// END STEP 2113
+// ========================================
 // Display the location in the list.
 locationList.appendChild(item);
 
@@ -1374,7 +1391,31 @@ approvedDays.delete(correctionDate);
       alert("Correction saved successfully.");
     });
 
-    item.appendChild(activityText);// ========================================
+// ========================================
+// START STEP 2112
+// PURPOSE:
+// Create a flexible row for the activity
+// description and Edit Description button.
+// Long descriptions can wrap naturally.
+// ========================================
+
+const descriptionRow = document.createElement("div");
+
+descriptionRow.style.display = "flex";
+descriptionRow.style.alignItems = "flex-start";
+descriptionRow.style.flexWrap = "wrap";
+descriptionRow.style.gap = "10px";
+
+activityText.style.flex = "1 1 250px";
+activityText.style.minWidth = "0";
+
+descriptionRow.appendChild(activityText);
+item.appendChild(descriptionRow);
+
+// ========================================
+// END STEP 2112
+// ========================================    
+    // ========================================
 // START STEP 2060
 // PURPOSE:
 // Create a location dropdown with saved
