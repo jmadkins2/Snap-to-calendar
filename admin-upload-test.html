@@ -1403,8 +1403,20 @@ const descriptionRow = document.createElement("div");
 
 descriptionRow.style.display = "flex";
 descriptionRow.style.alignItems = "flex-start";
-descriptionRow.style.flexWrap = "wrap";
-descriptionRow.style.gap = "10px";
+// ========================================
+// START STEP 2122
+// PURPOSE:
+// Keep the activity description and Edit
+// Description button on the same row.
+// Long descriptions will wrap within
+// their own available space.
+// ========================================
+
+descriptionRow.style.flexWrap = "nowrap";
+
+// ========================================
+// END STEP 2122
+// ========================================descriptionRow.style.gap = "10px";
 
 // ========================================
 // START STEP 2118
