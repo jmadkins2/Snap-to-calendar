@@ -1019,9 +1019,33 @@ saveButton.textContent = originalSaveButtonText;
     document.getElementById("testExtractionButton").hidden = false;
 
         await loadLocations();
+
+   // START STEP 2232
+// PURPOSE: Check publishing eligibility after administrator verification.
+await testPublishingEligibility();
+// END STEP 2232 
     
   }
 
+// START STEP 2231
+// PURPOSE: Test publishing eligibility using the logged-in administrator.
+// This does not publish or modify any calendar records.
+
+async function testPublishingEligibility() {
+  const { data, error } = await supabase.rpc(
+    "can_publish_import",
+    { p_import_id: 16 }
+  );
+
+  if (error) {
+    console.error("Publishing eligibility check failed:", error);
+  } else {
+    console.log("Import 16 eligible for publishing:", data);
+  }
+}
+
+// END STEP 2231
+      
   checkAdministratorAccess();
 
 let currentReviewDay = 1;
@@ -1279,6 +1303,7 @@ await loadLocations();
 await displayReviewActivities(firstDayActivities);
   }
 }
+
 
   
 async function displayReviewActivities(dayText) {
