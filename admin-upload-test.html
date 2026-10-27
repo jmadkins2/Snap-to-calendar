@@ -1621,8 +1621,43 @@ amPmSelect.addEventListener("change", function () {
 // END: AM/PM CHANGE SAFEGUARD
 // ========================================
 
-item.appendChild(amPmSelect);
+// ========================================
+// START STEP 2105
+// PURPOSE:
+// Create a flexible layout container for
+// the activity time and status controls.
+// ========================================
 
+const timeStatusRow = document.createElement("div");
+
+timeStatusRow.style.display = "flex";
+timeStatusRow.style.flexWrap = "wrap";
+timeStatusRow.style.gap = "20px";
+timeStatusRow.style.alignItems = "flex-start";
+timeStatusRow.style.marginTop = "10px";
+
+// ========================================
+// END STEP 2105
+// ========================================
+    
+// ========================================
+// START STEP 2106
+// PURPOSE:
+// Group the starting time and AM/PM
+// dropdown in one container.
+// ========================================
+
+const timeControls = document.createElement("div");
+
+timeControls.appendChild(timeLabel);
+timeControls.appendChild(amPmSelect);
+
+timeStatusRow.appendChild(timeControls);
+item.appendChild(timeStatusRow);
+
+// ========================================
+// END STEP 2106
+// ========================================
 // ========================================
 // START STEP 1571
 // PURPOSE:
@@ -1673,8 +1708,23 @@ statusSelect.value = cancellationDetected
 // END STEP 1577
 // ========================================
     
+// ========================================
+// START STEP 2107
+// PURPOSE:
+// Place Activity Status beside Starting Time
+// in the flexible layout container.
+// ========================================
+
 statusLabel.appendChild(statusSelect);
-item.appendChild(statusLabel);
+
+statusLabel.style.marginTop = "6px";
+statusLabel.style.marginBottom = "0";
+
+timeStatusRow.appendChild(statusLabel);
+
+// ========================================
+// END STEP 2107
+// ========================================
 
 // ========================================
 // START STEP 2101
