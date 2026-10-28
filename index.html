@@ -55,18 +55,29 @@ async function loadPublishedActivities() {
 // PURPOSE: Convert published Supabase activities
 // into the format used by the resident calendar.
 
-function convertPublishedActivities(data) {
-  return data.map(activity => ({
-    id: "published-" + activity.activity_id,
-    name: activity.activity_name,
-    when: activity.activity_date + "T" +
-          activity.start_time.slice(0, 5),
-    place: activity.location || "",
-    selected: false,
-    cancelled: false
-  }));
-}
+// START STEP 2340
+// PURPOSE: Restore each resident's saved selections
+// when converting published activities.
 
+function convertPublishedActivities(data) {
+  const savedSelections = getResidentSelections();
+
+  return data.map(activity => {
+    const id = "published-" + activity.activity_id;
+
+    return {
+      id: id,
+      name: activity.activity_name,
+      when: activity.activity_date + "T" +
+            activity.start_time.slice(0, 5),
+      place: activity.location || "",
+      selected: savedSelections[id] === true,
+      cancelled: false
+    };
+  });
+ }
+// END STEP 2340
+ 
 // END STEP 2331
 
 // START STEP 2335
