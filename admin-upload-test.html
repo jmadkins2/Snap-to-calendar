@@ -1202,7 +1202,17 @@ const confirmed = confirm(
 if (!confirmed) {
   return;
 }
+// START STEP 2240
+// PURPOSE: Prevent publication if no calendar import is selected.
 
+if (!currentImportId) {
+  alert("No calendar is selected. Publication canceled.");
+  return;
+}
+
+// END STEP 2240
+
+    
 alert(
   "Publication confirmed. The actual publishing " +
   "command has not been connected yet."
