@@ -1170,9 +1170,20 @@ await displayReviewActivities(dayText);
   const [year, month] = savedCalendarMonth.split("-").map(Number);
   const daysInMonth = new Date(year, month, 0).getDate();
 
-  const publishButton = document.getElementById("publishCalendarButton");
-publishButton.disabled = approvedDays.size !== daysInMonth;
-publishButton.title = publishButton.disabled
+// START STEP 2249
+// PURPOSE: Keep the Publish Calendar button disabled
+// after a successful publication during this page session.
+
+const publishButton =
+  document.getElementById("publishCalendarButton");
+
+publishButton.disabled =
+  approvedDays.size !== daysInMonth ||
+  publishButton.dataset.published === "true";
+
+// END STEP 2249
+        
+        publishButton.title = publishButton.disabled
   ? "Approve all days before publishing."
   : "All days approved. Ready for publication.";
 
@@ -1193,52 +1204,279 @@ document.getElementById("publishCalendarButton")
 // PURPOSE: Require confirmation before publishing a calendar.
 // This step does not publish or modify any records.
 
+// START STEP 2272
+// PURPOSE: Make sure a calendar is selected before
+// showing the publication confirmation message.
+
+if (!currentImportId) {
+  alert("No calendar is selected. Publication canceled.");
+  return;
+}
+
+// END STEP 2272
+    
+// START STEP 2271
+// PURPOSE: Show the selected import number in the
+// publication confirmation to help prevent mistakes.
+
 const confirmed = confirm(
-  "Are you sure you want to publish this calendar? " +
+  "Are you sure you want to publish calendar import " +
+  currentImportId + "?\n\n" +
   "Once published, its scheduled activities will become " +
   "available to residents."
 );
 
+// END STEP 2271
+    
 if (!confirmed) {
   return;
 }
-// START STEP 2240
-// PURPOSE: Prevent publication if no calendar import is selected.
 
+
+// START STEP 2255
+// PURPOSE: Prevent another publication attempt while
+// the eligibility check and publishing process run.
+
+const publishActionButton =
+  document.getElementById("publishCalendarButton");
+
+  // START STEP 2275
+// PURPOSE: Prevent another publication attempt if
+// the button is disabled or the calendar is already
+// marked as published in this browser session.
+
+if (
+  publishActionButton.disabled ||
+  publishActionButton.dataset.published === "true"
+) {
+  return;
+}
+
+publishActionButton.disabled = true;
+
+// END STEP 2275
+
+// END STEP 2255
+    
 // START STEP 2242
 // PURPOSE: Verify publication eligibility immediately before publishing.
 // This step does NOT publish or modify any calendar records.
+
+// START STEP 2270
+// PURPOSE: Confirm the selected calendar is still READY
+// before checking eligibility or attempting publication.
+// Prevent publication if the status has changed.
+
+const { data: currentImport, error: importCheckError } =
+  await supabase
+    .from("calendar_imports")
+    .select("status")
+    .eq("import_id", currentImportId)
+    .eq("community_id", 1)
+    .single();
+
+if (importCheckError || !currentImport) {
+  console.error("Calendar status check failed:", importCheckError);
+
+  alert(
+    "Could not verify the calendar's status. " +
+    "Please refresh the page before trying again."
+  );
+  return;
+}
+
+if (currentImport.status !== "ready") {
+  alert(
+    "Publication canceled. Calendar status is: " +
+    currentImport.status +
+    ". Only a READY calendar can be published."
+  );
+  return;
+}
+
+// END STEP 2270
+
+    
+// START STEP 2258
+// PURPOSE: Ask Supabase whether the selected calendar
+// is eligible for publication.
 
 const { data: canPublish, error: eligibilityError } =
   await supabase.rpc("can_publish_import", {
     p_import_id: currentImportId
   });
 
+// END STEP 2258
+    
+// START STEP 2256
+// PURPOSE: Restore the Publish button if eligibility
+// cannot be confirmed. No publication is attempted.
+
+// START STEP 2266
+// PURPOSE: Keep publication disabled if eligibility
+// cannot be verified. Require a fresh status check.
+
 if (eligibilityError) {
   console.error("Publishing eligibility error:", eligibilityError);
-  alert("Could not verify publishing eligibility. Nothing was published.");
+
+  publishActionButton.disabled = true;
+
+  alert(
+    "Could not verify publishing eligibility. " +
+    "Please refresh the page before trying again."
+  );
   return;
 }
+
+// END STEP 2266
+
+// START STEP 2267
+// PURPOSE: Prevent repeated publication attempts when
+// Supabase reports that the calendar is not eligible.
 
 if (canPublish !== true) {
-  alert("This calendar is not eligible for publication. Nothing was published.");
+  publishActionButton.disabled = true;
+
+  alert(
+    "This calendar is not eligible for publication. " +
+    "Please refresh the page and check its status."
+  );
   return;
 }
 
-alert(
-  "Publishing eligibility confirmed. " +
-  "The actual publishing command has not been connected yet."
-);
+// END STEP 2267
+    
+// END STEP 2256
+
+
+// START STEP 2244
+// PURPOSE: Publish the selected calendar using the existing
+// Supabase function, with success and error feedback.
+
+const publishButton =
+  document.getElementById("publishCalendarButton");
+
+publishButton.disabled = true;
+publishButton.textContent = "Publishing...";
+
+try {
+  const { data: publicationId, error: publishError } =
+    await supabase.rpc("publish_calendar", {
+      p_import_id: currentImportId
+    });
+
+  if (publishError) {
+    console.error("Calendar publication failed:", publishError);
+
+// START STEP 2262
+// PURPOSE: Check whether publication actually succeeded
+// before reporting an error or allowing another attempt.
+
+const { data: importStatus, error: statusError } =
+  await supabase
+    .from("calendar_imports")
+    .select("status, published_at")
+    .eq("import_id", currentImportId)
+    .eq("community_id", 1)
+    .single();
+
+if (statusError || !importStatus) {
+  console.error("Could not verify publication status:", statusError);
+
+  publishButton.dataset.published = "true";
+
+  alert(
+    "Publication status could not be verified. " +
+    "Please check Supabase before trying again."
+  );
+  return;
+}
+
+if (importStatus.status === "published") {
+  publishButton.dataset.published = "true";
+
+  alert(
+    "Supabase confirms this calendar was published. " +
+    "Please refresh the page to verify."
+  );
+  return;
+}
+
+// START STEP 2265
+// PURPOSE: Block another publication attempt if the
+// database reports an unexpected calendar status.
+
+if (importStatus.status !== "ready") {
+  publishButton.dataset.published = "true";
+
+  alert(
+    "The calendar has an unexpected status: " +
+    importStatus.status +
+    ". Please check Supabase before trying again."
+  );
+  return;
+}
+
+// END STEP 2265
+    
+// END STEP 2262
+
+    alert(
+      "Publication failed: " + publishError.message
+    );
+
+    return;
+  }
+
+// START STEP 2249B
+// PURPOSE: Remember successful publication for this page session.
+
+publishButton.dataset.published = "true";
+
+// END STEP 2249B
+  
+  alert(
+    "Calendar published successfully!\n" +
+    "Publication ID: " + publicationId
+  );
+
+// START STEP 2263
+// PURPOSE: Prevent another publication attempt when
+// an unexpected error leaves the result uncertain.
+
+} catch (error) {
+  console.error("Unexpected publication error:", error);
+
+  publishButton.dataset.published = "true";
+
+  alert(
+    "An unexpected error occurred. " +
+    "The publication status is uncertain. " +
+    "Please check Supabase before trying again."
+  );
+
+// END STEP 2263
+
+  // START STEP 2260
+// PURPOSE: Restore the Publish button after an error,
+// but keep it disabled after successful publication.
+
+// START STEP 2279
+// PURPOSE: Keep the Publish button disabled after
+// any publication attempt, whether successful or not.
+// A page refresh is required before another attempt.
+
+} finally {
+  publishButton.textContent = "Publish Calendar";
+  publishButton.disabled = true;
+}
+
+// END STEP 2279
+// END STEP 2260
+
+// END STEP 2244
 
 // END STEP 2242
-
-// END STEP 2240
-
-    
-alert(
-  "Publication confirmed. The actual publishing " +
-  "command has not been connected yet."
-);
 
 // END STEP 2237
   });
@@ -1299,8 +1537,15 @@ function findNextUnapprovedDay() {
       
   const { data, error } = await supabase
   .from("calendar_imports")
-  .select("import_id, extracted_text, calendar_month")
-  .eq("community_id", 1)
+// START STEP 2252
+// PURPOSE: Retrieve the calendar's publication status
+// so we can prevent accidental repeat publication.
+
+.select("import_id, extracted_text, calendar_month, status")
+
+// END STEP 2252
+    
+    .eq("community_id", 1)
   .not("extracted_text", "is", null)
   .order("import_id", { ascending: false })
   .limit(1)
@@ -1314,6 +1559,17 @@ function findNextUnapprovedDay() {
       currentImportId = data.import_id;
 console.log("Selected calendar import:", currentImportId);
 
+    // START STEP 2253
+// PURPOSE: Prevent repeat publication when Supabase
+// reports that the selected calendar is already published.
+
+const publishCalendarButton =
+  document.getElementById("publishCalendarButton");
+
+publishCalendarButton.dataset.published =
+  data.status === "published" ? "true" : "false";
+
+// END STEP 2253
 
   if (data?.extracted_text) {
     savedCalendarText = data.extracted_text;
