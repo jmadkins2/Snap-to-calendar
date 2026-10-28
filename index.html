@@ -112,6 +112,23 @@ function saveResidentSelections(activities) {
   );
 }
 
+// START STEP 2344
+// PURPOSE: Save a resident's checkbox choices
+// without changing the official published calendar.
+
+function updateResidentSelection(activityId, isSelected) {
+  const selections = getResidentSelections();
+
+  selections[activityId] = isSelected === true;
+
+  localStorage.setItem(
+    residentSelectionsKey,
+    JSON.stringify(selections)
+  );
+}
+
+// END STEP 2344
+ 
 // END STEP 2335
  
 // END STEP 2320
