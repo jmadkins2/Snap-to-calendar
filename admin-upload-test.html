@@ -1205,10 +1205,32 @@ if (!confirmed) {
 // START STEP 2240
 // PURPOSE: Prevent publication if no calendar import is selected.
 
-if (!currentImportId) {
-  alert("No calendar is selected. Publication canceled.");
+// START STEP 2242
+// PURPOSE: Verify publication eligibility immediately before publishing.
+// This step does NOT publish or modify any calendar records.
+
+const { data: canPublish, error: eligibilityError } =
+  await supabase.rpc("can_publish_import", {
+    p_import_id: currentImportId
+  });
+
+if (eligibilityError) {
+  console.error("Publishing eligibility error:", eligibilityError);
+  alert("Could not verify publishing eligibility. Nothing was published.");
   return;
 }
+
+if (canPublish !== true) {
+  alert("This calendar is not eligible for publication. Nothing was published.");
+  return;
+}
+
+alert(
+  "Publishing eligibility confirmed. " +
+  "The actual publishing command has not been connected yet."
+);
+
+// END STEP 2242
 
 // END STEP 2240
 
