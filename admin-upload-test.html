@@ -1189,11 +1189,26 @@ publishButton.title = publishButton.disabled
 document.getElementById("publishCalendarButton")
   .addEventListener("click", async function () {
 
-    alert(
-      "Publish Calendar button connected. " +
-      "No calendar has been published yet."
-    );
+// START STEP 2237
+// PURPOSE: Require confirmation before publishing a calendar.
+// This step does not publish or modify any records.
 
+const confirmed = confirm(
+  "Are you sure you want to publish this calendar? " +
+  "Once published, its scheduled activities will become " +
+  "available to residents."
+);
+
+if (!confirmed) {
+  return;
+}
+
+alert(
+  "Publication confirmed. The actual publishing " +
+  "command has not been connected yet."
+);
+
+// END STEP 2237
   });
 
 // END STEP 2235
