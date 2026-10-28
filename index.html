@@ -2,7 +2,40 @@
 const initialEvents=[{id:'bp-5-tech',name:'Tech Classes with Aiden',when:'2026-10-05T10:00',place:'Crystal Dining Room',selected:true},{id:'bp-5-mahjongg',name:'Beginning Mahjongg',when:'2026-10-05T12:00',place:'Crossroads Game Room',selected:true},{id:'bp-6-spies',name:'Spies, Lies and Betrayal',when:'2026-10-06T13:00',place:'Activities Room',selected:true},{id:'bp-8-ra',name:'Residents Association Meeting',when:'2026-10-08T09:15',place:'Crystal Dining Room',selected:true}];
  let events;let institution='Blue Palms Village at Fletcher';try{let saved=JSON.parse(localStorage.getItem('snap-institution-v3')||'null');events=Array.isArray(saved?.events)?saved.events:initialEvents.map(e=>({...e}));institution=typeof saved?.institution==='string'?saved.institution:institution}catch(_){events=initialEvents.map(e=>({...e}))}
  function save(){try{localStorage.setItem('snap-institution-v3',JSON.stringify({institution,events}))}catch(_){}}
- const $=id=>document.getElementById(id);function draw(){let root=$('events');root.replaceChildren();for(let e of events.filter(x=>!x.cancelled)){let row=document.createElement('div');row.className='event';let check=document.createElement('input');check.type='checkbox';check.checked=e.selected;check.id=e.id;
+ const $=id=>document.getElementById(id);function draw(){let root=$('events');root.replaceChildren();
+
+ // START STEP 2364
+// PURPOSE: Group activities by date and display
+// a date heading before each day's activities.
+
+let previousDate='';
+
+for(let e of events.filter(x=>!x.cancelled)){
+  const activityDate=e.when.slice(0,10);
+
+  if(activityDate!==previousDate){
+    const heading=document.createElement('h3');
+
+    heading.textContent=new Date(
+      activityDate+'T12:00'
+    ).toLocaleDateString(undefined,{
+      weekday:'long',
+      month:'long',
+      day:'numeric'
+    });
+
+    heading.style.cssText=
+      'border-bottom:2px solid #777;' +
+      'padding:14px 0 8px;' +
+      'margin:18px 0 10px;' +
+      'font-size:1.15rem;';
+
+    root.append(heading);
+    previousDate=activityDate;
+  }
+// END STEP 2364
+  
+let row=document.createElement('div');row.className='event';let check=document.createElement('input');check.type='checkbox';check.checked=e.selected;check.id=e.id;
                                                                                                                                                   
   check.onchange=()=>{
   e.selected=check.checked;
@@ -15,8 +48,24 @@ const initialEvents=[{id:'bp-5-tech',name:'Tech Classes with Aiden',when:'2026-1
   // END STEP 2348
 
   update();
-};let label=document.createElement('label');label.htmlFor=e.id;let title=document.createElement('strong');title.textContent=e.name;let sub=document.createElement('small');sub.textContent=new Date(e.when).toLocaleString(undefined,{dateStyle:'medium',timeStyle:'short'})+' · '+e.place;label.append(title,sub);row.append(check,label);root.append(row)}update();save()}function update(){let n=events.filter(e=>e.selected&&!e.cancelled).length;$('count').textContent=n+' selected';$('printButton').disabled=!n;save()} 
-// START STEP 2351
+};
+ 
+let label=document.createElement('label');label.htmlFor=e.id;let title=document.createElement('strong');title.textContent=e.name;let sub=document.createElement('small');
+ 
+// START STEP 2366
+// PURPOSE: Show only the time and location
+// beneath each activity.
+
+sub.textContent=new Date(e.when).toLocaleTimeString(
+  undefined,
+  {hour:'numeric',minute:'2-digit'}
+)+' · '+e.place;
+
+// END STEP 2366 
+ 
+label.append(title,sub);row.append(check,label);root.append(row)}update();save()}function update(){let n=events.filter(e=>e.selected&&!e.cancelled).length;$('count').textContent=n+' selected';$('printButton').disabled=!n;save()} 
+
+ // START STEP 2351
 // PURPOSE: Select all available activities and save
 // personal selections for published activities.
 
