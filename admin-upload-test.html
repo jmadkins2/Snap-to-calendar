@@ -1181,6 +1181,22 @@ publishButton.title = publishButton.disabled
         
   
 }      
+
+// START STEP 2235
+// PURPOSE: Connect the Publish Calendar button to its click handler.
+// Publication itself is not implemented in this step.
+
+document.getElementById("publishCalendarButton")
+  .addEventListener("click", async function () {
+
+    alert(
+      "Publish Calendar button connected. " +
+      "No calendar has been published yet."
+    );
+
+  });
+
+// END STEP 2235
       
 function findNextUnapprovedDay() {
   if (!savedCalendarMonth) return null;
