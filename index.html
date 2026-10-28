@@ -68,6 +68,41 @@ function convertPublishedActivities(data) {
 }
 
 // END STEP 2331
+
+// START STEP 2335
+// PURPOSE: Save resident selections separately
+// from the official published calendar.
+
+const residentSelectionsKey = "pickmyactivities-selections-v1";
+
+function getResidentSelections() {
+  try {
+    const saved = JSON.parse(
+      localStorage.getItem(residentSelectionsKey) || "{}"
+    );
+
+    return saved && typeof saved === "object" &&
+           !Array.isArray(saved) ? saved : {};
+  } catch (_) {
+    return {};
+  }
+}
+
+function saveResidentSelections(activities) {
+  const selections = {};
+
+  for (const activity of activities) {
+    selections[activity.id] = activity.selected === true;
+  }
+
+  localStorage.setItem(
+    residentSelectionsKey,
+    JSON.stringify(selections)
+  );
+}
+
+// END STEP 2335
+ 
 // END STEP 2320
 
   // END STEP 2311
