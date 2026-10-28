@@ -232,9 +232,33 @@ function updateResidentSelection(activityId, isSelected) {
  
 // END STEP 2320
 
-  // END STEP 2311
+// END STEP 2311
+// START STEP 2370
+// PURPOSE: Automatically load the official published
+// calendar when a resident opens the page.
+
+async function initializeResidentCalendar() {
+  const data = await loadPublishedActivities();
+
+  if (!data) {
+    console.error("Official calendar could not be loaded.");
+    return;
+  }
+
+  events = convertPublishedActivities(data);
+  draw();
+  refreshInstitution();
+
+  console.log("Resident calendar loaded:", events.length);
+}
+
+initializeResidentCalendar();
+
+// END STEP 2370
+// END STEP 2311 
+ 
 </script>
-<!-- END STEP 2311 -->
+
 
 </body>
 </html>
