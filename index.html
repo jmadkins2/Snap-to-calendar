@@ -26,6 +26,34 @@ draw();
 
   console.log("Resident Supabase connection initialized.");
 
+ // START STEP 2320
+// PURPOSE: Retrieve the official published calendar
+// from Supabase without modifying any records.
+
+async function loadPublishedActivities() {
+  const { data, error } = await residentSupabase.rpc(
+    "get_published_activities",
+    {
+      p_community_id: 1,
+      p_calendar_month: "2026-10-01"
+    }
+  );
+
+  if (error) {
+    console.error("Could not load published activities:", error);
+    return null;
+  }
+
+  console.log(
+    "Published activities retrieved:",
+    data.length
+  );
+
+  return data;
+}
+
+// END STEP 2320
+
   // END STEP 2311
 </script>
 <!-- END STEP 2311 -->
