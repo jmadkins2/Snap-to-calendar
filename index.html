@@ -136,7 +136,14 @@ sub.textContent=new Date(e.when).toLocaleTimeString(
 
 // END STEP 2366 
  
-label.append(title,sub);row.append(check,label);root.append(row)}update();save()}function update(){let n=events.filter(e=>e.selected&&!e.cancelled).length;$('count').textContent=n+' selected';$('printButton').disabled=!n;save()} 
+// START STEP 2445
+// PURPOSE: Show the activity name above its time and location.
+title.style.display='block';
+sub.style.display='block';
+label.append(title,sub);
+// END STEP 2445
+ 
+ row.append(check,label);root.append(row)}update();save()}function update(){let n=events.filter(e=>e.selected&&!e.cancelled).length;$('count').textContent=n+' selected';$('printButton').disabled=!n;save()} 
 
  // START STEP 2351
 // PURPOSE: Select all available activities and save
