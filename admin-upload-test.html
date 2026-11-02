@@ -1593,6 +1593,24 @@ if (isCurrentDayApproved()) {
 const reviewDate = new Date(year, month - 1, 1);
 
 // ========================================
+// START STEP 2556
+// PURPOSE:
+// Display the correct calendar date
+// above the activities being reviewed.
+// ========================================
+
+document.getElementById("reviewDate").textContent =
+  reviewDate.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric"
+  });
+
+// ========================================
+// END STEP 2556
+// ========================================
+    
+// ========================================
 // START STEP 2548
 // PURPOSE:
 // Automatically display the correct month
