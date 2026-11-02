@@ -1073,6 +1073,7 @@ document.getElementById("reviewDate").textContent =
     month: "long", day: "numeric", year: "numeric"
   });
 
+    
 document.getElementById("approveDayButton").textContent =
   "Approve and Save" + reviewDate.toLocaleDateString("en-US", {
     month: "long", day: "numeric"
@@ -1591,12 +1592,25 @@ if (isCurrentDayApproved()) {
 
 const reviewDate = new Date(year, month - 1, 1);
 
-document.getElementById("reviewDate").textContent =
+// ========================================
+// START STEP 2548
+// PURPOSE:
+// Automatically display the correct month
+// and day on the Save & Approve button
+// when a calendar is first loaded.
+// ========================================
+
+document.getElementById("approveDayButton").textContent =
+  "Save & Approve " +
   reviewDate.toLocaleDateString("en-US", {
     month: "long",
-    day: "numeric",
-    year: "numeric"
+    day: "numeric"
   });
+
+// ========================================
+// END STEP 2548
+// ========================================    
+    
     const firstDayActivities = getCalendarDay(1);
 
 console.log(
